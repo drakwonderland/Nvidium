@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 380" width="640" height="380" role="img" aria-label="Architecture and BIM Workstation schematic">
+  <rect width="640" height="380" fill="#0D3A40"/>
+  <g stroke="rgba(242,244,242,0.08)" stroke-width="1">
+    <path d="M0 40H640M0 80H640M0 120H640M0 160H640M0 200H640M0 240H640M0 280H640M0 320H640"/>
+    <path d="M40 0V380M80 0V380M120 0V380M160 0V380M200 0V380M240 0V380M280 0V380M320 0V380M360 0V380M400 0V380M440 0V380M480 0V380M520 0V380M560 0V380M600 0V380"/>
+  </g>
+  <rect x="24" y="24" width="592" height="332" fill="none" stroke="#9FC2C5" stroke-width="1.5"/>
+  <rect x="76" y="56" width="224" height="268" fill="#13484F" stroke="#F2F4F2" stroke-width="2"/>
+  <line x1="76" y1="100" x2="300" y2="100" stroke="#9FC2C5" stroke-width="1.2"/>
+  <text x="92" y="84" fill="#FFB38A" font-family="monospace" font-size="11">ATX MESH // ACOUSTIC DAMPED</text>
+  <rect x="108" y="118" width="40" height="72" fill="#165760" stroke="#F2F4F2" stroke-width="1.5"/>
+  <rect x="156" y="118" width="40" height="72" fill="#165760" stroke="#F2F4F2" stroke-width="1.5"/>
+  <rect x="212" y="118" width="8" height="68" fill="#FFB38A"/>
+  <rect x="226" y="118" width="8" height="68" fill="#FFB38A"/>
+  <rect x="240" y="118" width="8" height="68" fill="#9FC2C5"/>
+  <rect x="254" y="118" width="8" height="68" fill="#9FC2C5"/>
+  <rect x="102" y="210" width="174" height="38" fill="#C8501F"/>
+  <text x="114" y="233" fill="#FFFFFF" font-family="monospace" font-size="12" font-weight="bold">RTX 4070 SUPER 12G</text>
+  <rect x="102" y="264" width="124" height="34" fill="#09292E" stroke="#9FC2C5" stroke-width="1.2"/>
+  <text x="114" y="285" fill="#D4E1E2" font-family="monospace" font-size="11">750W ATX 3.0 GOLD</text>
+  <g font-family="monospace" fill="#F2F4F2">
+    <text x="330" y="92" font-size="12" fill="#FFB38A">TIER 02 // BENCHMARK SPEC</text>
+    <text x="330" y="124" font-size="22" font-weight="bold">Architect BIM Rig</text>
+    <line x1="330" y1="142" x2="584" y2="142" stroke="#9FC2C5" stroke-width="1"/>
+    <text x="330" y="172" font-size="13" fill="#D4E1E2">CPU   Ryzen 7 7700X (8C/16T)</text>
+    <text x="330" y="198" font-size="13" fill="#D4E1E2">RAM   64GB DDR5-6000 EXPO</text>
+    <text x="330" y="224" font-size="13" fill="#D4E1E2">DISK  2TB PCIe 4.0 NVMe</text>
+    <text x="330" y="250" font-size="13" fill="#D4E1E2">WORK  Revit · Rhino · Blender</text>
+    <rect x="330" y="276" width="246" height="40" fill="#C8501F"/>
+    <text x="346" y="301" font-size="14" font-weight="bold" fill="#FFFFFF">70% PO DEPOSIT · BURN-IN LOG</text>
+  </g>
+</svg>

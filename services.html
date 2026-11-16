@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products &amp; Services — Nvidium Proposal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body data-page="services" data-section-num="3">
+  <header class="sticky-top">
+    <nav class="navbar navbar-expand-xl esd-navbar" aria-label="Proposal Sections">
+      <div class="container-xxl">
+        <a class="navbar-brand" href="/">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" stroke="#F2F4F2" stroke-width="2"/>
+            <rect x="7" y="7" width="10" height="10" fill="#B94417"/>
+            <path d="M12 2V7M12 17V22M2 12H7M17 12H22" stroke="#9FC2C5" stroke-width="1.5"/>
+          </svg>
+          <span>Nvidium</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav me-auto mb-2 mb-xl-0 ms-xl-3 gap-xl-1">
+            <li class="nav-item"><a class="nav-link" data-nav="index" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="about" href="/about">About</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="services" href="/services">Services</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="market" href="/market">Market</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="marketing" href="/marketing">Marketing</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="operations" href="/operations">Operations</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="financials" href="/financials">Financials</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="contact" href="/contact">Contact</a></li>
+          </ul>
+          <a id="nav-quote-pill" class="quote-pill-nav d-inline-block mt-2 mt-xl-0" href="/checkout">Quote: ₱62,500</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div id="global-runtime-alert" class="alert alert-warning rounded-0 mb-0 d-none" role="alert"></div>
+
+    <section class="page-header-light">
+      <div class="container-xxl">
+        <h1>PC Builder &amp; Services</h1>
+        <p class="page-lead">Pick a starter build, swap any compatible part, and inspect the live price.</p>
+      </div>
+    </section>
+
+    <section class="py-4 py-lg-5">
+      <div class="container-xxl">
+        <div class="tier-strip mb-4">
+          <article class="tier-strip-card">
+            <div>
+              <div class="d-flex justify-content-between align-items-baseline gap-2 mb-1">
+                <h2 class="h5 my-0">Student &amp; CAD</h2>
+                <strong class="num-php">₱44,500</strong>
+              </div>
+              <p class="font-mono-data small text-secondary mb-0">Ryzen 5 5600 · 32GB DDR4 · 1TB · RTX 4060</p>
+            </div>
+            <a href="#services-configurator" class="btn btn-ink-outline btn-sm" data-load-preset="campus-cad">Load preset</a>
+          </article>
+
+          <article class="tier-strip-card is-featured">
+            <div>
+              <div class="d-flex justify-content-between align-items-baseline gap-2 mb-1">
+                <h2 class="h5 my-0">Architect &amp; 3D</h2>
+                <strong class="num-php" style="color: var(--esd-copper);">₱62,500</strong>
+              </div>
+              <p class="font-mono-data small text-secondary mb-0">Ryzen 7 7700 · 64GB DDR5 · 2TB · RTX 4060 Ti</p>
+            </div>
+            <a href="#services-configurator" class="btn btn-copper btn-sm" data-load-preset="architect-bim">Load preset</a>
+          </article>
+
+          <article class="tier-strip-card">
+            <div>
+              <div class="d-flex justify-content-between align-items-baseline gap-2 mb-1">
+                <h2 class="h5 my-0">Studio &amp; AI</h2>
+                <strong class="num-php">₱96,000</strong>
+              </div>
+              <p class="font-mono-data small text-secondary mb-0">Ryzen 9 7900X · 64GB DDR5 · 2TB · RTX 4070 Super</p>
+            </div>
+            <a href="#services-configurator" class="btn btn-ink-outline btn-sm" data-load-preset="studio-render">Load preset</a>
+          </article>
+        </div>
+
+        <div id="services-configurator" class="ledger-panel p-4">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 mb-3 border-bottom border-dark">
+            <div>
+              <h2 class="h3 my-0">Customize Build</h2>
+              <p class="small text-secondary mb-0">Includes ₱2,500 assembly &amp; 24-hr stress test.</p>
+            </div>
+            <button id="reset-quote-btn" type="button" class="btn btn-ink-outline btn-sm no-print">Reset</button>
+          </div>
+
+          <div class="row g-4">
+            <div class="col-lg-7">
+              <div class="mb-3">
+                <div class="btn-group w-100 mb-2" role="group" aria-label="Order Type">
+                  <button type="button" class="btn btn-ink-outline btn-sm is-active" data-buyer-mode="b2c" aria-pressed="true">Personal / Student (B2C)</button>
+                  <button type="button" class="btn btn-ink-outline btn-sm" data-buyer-mode="b2b" aria-pressed="false">Business / Office (B2B)</button>
+                </div>
+                <p id="buyer-mode-hint" class="small text-secondary mb-0">Personal (B2C): 1 PC build · 1-yr free warranty · ₱0/mo.</p>
+              </div>
+
+              <fieldset class="mb-3">
+                <legend class="h6 fw-bold mb-2">1. Starter Tier</legend>
+                <div class="row g-2">
+                  <div class="col-md-4">
+                    <label class="stage-btn py-2 d-block cursor-pointer">
+                      <input type="radio" class="form-check-input me-2" name="buildTier" value="campus-cad">
+                      <span class="fw-bold d-block small">Student &amp; CAD</span>
+                      <span class="num-php small">₱44,500</span>
+                    </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="stage-btn py-2 d-block cursor-pointer">
+                      <input type="radio" class="form-check-input me-2" name="buildTier" value="architect-bim" checked>
+                      <span class="fw-bold d-block small">Architect &amp; 3D</span>
+                      <span class="num-php small">₱62,500</span>
+                    </label>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="stage-btn py-2 d-block cursor-pointer">
+                      <input type="radio" class="form-check-input me-2" name="buildTier" value="studio-render">
+                      <span class="fw-bold d-block small">Studio &amp; AI</span>
+                      <span class="num-php small">₱96,000</span>
+                    </label>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="mb-3">
+                <legend class="h6 fw-bold mb-2">2. Core Parts</legend>
+                <div id="build-compat-status" class="esd-compat-bar small font-mono-data mb-2" aria-live="polite">
+                  Compatible · AM5 · DDR5 · ~380W load / 750W PSU · mATX fit
+                </div>
+                <div class="row g-2">
+                  <div class="col-md-6">
+                    <label for="part-cpu" class="form-label fw-semibold small mb-1">CPU</label>
+                    <select id="part-cpu" class="form-select form-select-sm"></select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="part-gpu" class="form-label fw-semibold small mb-1">Graphics (GPU)</label>
+                    <select id="part-gpu" class="form-select form-select-sm"></select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="part-ram" class="form-label fw-semibold small mb-1">Memory (RAM)</label>
+                    <select id="part-ram" class="form-select form-select-sm"></select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="part-ssd" class="form-label fw-semibold small mb-1">Primary SSD</label>
+                    <select id="part-ssd" class="form-select form-select-sm"></select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="part-mobo" class="form-label fw-semibold small mb-1">Motherboard</label>
+                    <select id="part-mobo" class="form-select form-select-sm"></select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="part-psu" class="form-label fw-semibold small mb-1">Power Supply</label>
+                    <select id="part-psu" class="form-select form-select-sm"></select>
+                  </div>
+                </div>
+
+                <details class="esd-details mt-2">
+                  <summary class="font-mono-data small">Cooler, Case, 2nd Drive, Wi-Fi &amp; OS (6 parts)</summary>
+                  <div class="row g-2 pt-2 mt-1">
+                    <div class="col-md-6">
+                      <label for="part-cooler" class="form-label fw-semibold small mb-1">CPU Cooler</label>
+                      <select id="part-cooler" class="form-select form-select-sm"></select>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="part-case" class="form-label fw-semibold small mb-1">PC Case</label>
+                      <select id="part-case" class="form-select form-select-sm"></select>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="part-storage2" class="form-label fw-semibold small mb-1">2nd Drive</label>
+                      <select id="part-storage2" class="form-select form-select-sm"></select>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="part-fans" class="form-label fw-semibold small mb-1">Case Fans</label>
+                      <select id="part-fans" class="form-select form-select-sm"></select>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="part-wifi" class="form-label fw-semibold small mb-1">Wi-Fi / LAN</label>
+                      <select id="part-wifi" class="form-select form-select-sm"></select>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="part-os" class="form-label fw-semibold small mb-1">OS &amp; Office</label>
+                      <select id="part-os" class="form-select form-select-sm"></select>
+                    </div>
+                  </div>
+                </details>
+              </fieldset>
+
+              <div class="row g-2 mb-3">
+                <div class="col-sm-4">
+                  <label for="build-qty" class="form-label fw-bold small mb-1">Qty (1–10)</label>
+                  <input id="build-qty" type="number" class="form-control form-control-sm num-php" min="1" max="10" step="1" value="1">
+                </div>
+                <div class="col-sm-8">
+                  <label for="sla-select" class="form-label fw-bold small mb-1">Support Plan</label>
+                  <select id="sla-select" class="form-select form-select-sm">
+                    <option value="none" selected>Free 1-Yr Shop Warranty (₱0/mo)</option>
+                    <option value="b2c-care">Home Plus — 2x Cleaning + Chat (₱500/mo)</option>
+                    <option value="studio-8">B2B Studio — Up to 8 PCs (₱12,000/mo)</option>
+                    <option value="sme-15">B2B Office — Up to 15 PCs (₱19,500/mo)</option>
+                    <option value="clinic-25">B2B Clinic — Up to 25 PCs (₱29,000/mo)</option>
+                  </select>
+                </div>
+              </div>
+
+              <details class="esd-details">
+                <summary class="font-mono-data small">Add Monitors, UPS &amp; Peripherals (Optional)</summary>
+                <div class="row g-2 pt-2 mt-1">
+                  <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center gap-2 p-2 border border-dark bg-white h-100 small cursor-pointer">
+                      <span class="d-flex align-items-start gap-2">
+                        <input class="form-check-input flex-shrink-0 mt-1" type="checkbox" name="addonItem" value="ups-1000">
+                        <span>APC 1200VA UPS</span>
+                      </span>
+                      <span class="num-php fw-bold text-nowrap">+₱4,600</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center gap-2 p-2 border border-dark bg-white h-100 small cursor-pointer">
+                      <span class="d-flex align-items-start gap-2">
+                        <input class="form-check-input flex-shrink-0 mt-1" type="checkbox" name="addonItem" value="ups-1500">
+                        <span>CyberPower 1600VA UPS</span>
+                      </span>
+                      <span class="num-php fw-bold text-nowrap">+₱5,800</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center gap-2 p-2 border border-dark bg-white h-100 small cursor-pointer">
+                      <span class="d-flex align-items-start gap-2">
+                        <input class="form-check-input flex-shrink-0 mt-1" type="checkbox" name="addonItem" value="ups-sine-1500">
+                        <span>CyberPower Pure Sine UPS</span>
+                      </span>
+                      <span class="num-php fw-bold text-nowrap">+₱12,900</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center gap-2 p-2 border border-dark bg-white h-100 small cursor-pointer">
+                      <span class="d-flex align-items-start gap-2">
+                        <input class="form-check-input flex-shrink-0 mt-1" type="checkbox" name="addonItem" value="mon-aoc-24">
+                        <span>AOC 24" 180Hz IPS Monitor</span>
+                      </span>
+                      <span class="num-php fw-bold text-nowrap">+₱7,900</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center gap-2 p-2 border border-dark bg-white h-100 small cursor-pointer">
+                      <span class="d-flex align-items-start gap-2">
+                        <input class="form-check-input flex-shrink-0 mt-1" type="checkbox" name="addonItem" value="ram-kit">
+                        <span>ASUS ProArt 27" QHD</span>
+                      </span>
+                      <span class="num-php fw-bold text-nowrap">+₱14,500</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center gap-2 p-2 border border-dark bg-white h-100 small cursor-pointer">
+                      <span class="d-flex align-items-start gap-2">
+                        <input class="form-check-input flex-shrink-0 mt-1" type="checkbox" name="addonItem" value="mon-lg-27-qhd">
+                        <span>LG UltraGear 27" QHD</span>
+                      </span>
+                      <span class="num-php fw-bold text-nowrap">+₱15,800</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center gap-2 p-2 border border-dark bg-white h-100 small cursor-pointer">
+                      <span class="d-flex align-items-start gap-2">
+                        <input class="form-check-input flex-shrink-0 mt-1" type="checkbox" name="addonItem" value="mon-proart-4k">
+                        <span>ASUS ProArt 27" 4K</span>
+                      </span>
+                      <span class="num-php fw-bold text-nowrap">+₱28,500</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center gap-2 p-2 border border-dark bg-white h-100 small cursor-pointer">
+                      <span class="d-flex align-items-start gap-2">
+                        <input class="form-check-input flex-shrink-0 mt-1" type="checkbox" name="addonItem" value="mon-dell-34-uw">
+                        <span>Dell UltraSharp 34"</span>
+                      </span>
+                      <span class="num-php fw-bold text-nowrap">+₱46,500</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center gap-2 p-2 border border-dark bg-white h-100 small cursor-pointer">
+                      <span class="d-flex align-items-start gap-2">
+                        <input class="form-check-input flex-shrink-0 mt-1" type="checkbox" name="addonItem" value="color-cal">
+                        <span>Logitech G304 + Keychron C3</span>
+                      </span>
+                      <span class="num-php fw-bold text-nowrap">+₱3,600</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center gap-2 p-2 border border-dark bg-white h-100 small cursor-pointer">
+                      <span class="d-flex align-items-start gap-2">
+                        <input class="form-check-input flex-shrink-0 mt-1" type="checkbox" name="addonItem" value="periph-mx-combo">
+                        <span>MX Master 3S + Keychron K8</span>
+                      </span>
+                      <span class="num-php fw-bold text-nowrap">+₱9,800</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center gap-2 p-2 border border-dark bg-white h-100 small cursor-pointer">
+                      <span class="d-flex align-items-start gap-2">
+                        <input class="form-check-input flex-shrink-0 mt-1" type="checkbox" name="addonItem" value="wacom-intuos-m">
+                        <span>Wacom Intuos Medium</span>
+                      </span>
+                      <span class="num-php fw-bold text-nowrap">+₱11,200</span>
+                    </label>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="d-flex justify-content-between align-items-center gap-2 p-2 border border-dark bg-white h-100 small cursor-pointer">
+                      <span class="d-flex align-items-start gap-2">
+                        <input class="form-check-input flex-shrink-0 mt-1" type="checkbox" name="addonItem" value="webcam-headset">
+                        <span>Logitech Brio + Jabra Headset</span>
+                      </span>
+                      <span class="num-php fw-bold text-nowrap">+₱6,900</span>
+                    </label>
+                  </div>
+                </div>
+              </details>
+            </div>
+
+            <div class="col-lg-5">
+              <aside class="ledger-panel-dark spec-sheet-accent p-4 h-100 d-flex flex-column justify-content-between" aria-live="polite">
+                <div>
+                  <div class="d-flex justify-content-between align-items-center pb-2 mb-2 border-bottom border-light border-opacity-25 font-mono-data small">
+                    <span>Your quote</span>
+                    <span id="quote-provenance">Starting Quote</span>
+                  </div>
+                  <p id="quote-tier-title" class="fw-bold fs-5 mb-1">Architect &amp; 3D PC x 1</p>
+                  <p id="quote-tier-specs" class="small mb-2" style="color: var(--esd-teal-tint);">Ryzen 7 7700 · 64GB DDR5 · Lexar NM790 2TB · RTX 4060 Ti 8GB</p>
+
+                  <details class="esd-details esd-details-dark my-2">
+                    <summary class="font-mono-data small">View itemized parts</summary>
+                    <div id="quote-parts-list" class="small pt-2 mt-2 border-top border-light border-opacity-25"></div>
+                  </details>
+
+                  <div class="ledger-divider-row">
+                    <span>Total PC Price</span>
+                    <strong id="quote-hardware-total" class="num-php fs-5">₱62,500</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span id="quote-deposit-label">Due Today (70%)</span>
+                    <strong id="quote-deposit-due" class="num-php fs-5" style="color: var(--esd-copper-light);">₱43,750</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span id="quote-balance-label">Balance on Pickup</span>
+                    <strong id="quote-balance-due" class="num-php">₱18,750</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>Support Plan</span>
+                    <strong id="quote-sla-monthly" class="num-php">₱0 / mo (Free Warranty)</strong>
+                  </div>
+                  <p id="quote-sla-terms" class="small mt-2 mb-0" style="color: var(--esd-teal-subtle);">Free 1-yr shop warranty in Quezon City.</p>
+                </div>
+
+                <div class="d-grid gap-2 mt-4 no-print">
+                  <a id="quote-to-checkout" href="/checkout" class="btn btn-copper d-inline-flex align-items-center justify-content-center gap-2">
+                    <span>Go to Checkout</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                  </a>
+                  <div class="d-flex gap-2">
+                    <a id="quote-to-financials" href="/financials?view=buyer" class="btn btn-esd-outline btn-sm w-50">Installments</a>
+                    <a id="quote-to-contact" href="/contact" class="btn btn-esd-outline btn-sm w-50">Ask / Quote</a>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+
+        <details class="esd-details ledger-panel p-3 mt-4" id="full-parts-catalog">
+          <summary class="font-mono-data fw-bold">Browse Full Price List &amp; B2B Office Support Plans</summary>
+          <div class="pt-3 mt-2 border-top border-dark border-opacity-25">
+            <div class="row g-3 mb-3 no-print">
+              <div class="col-md-5">
+                <label for="parts-catalog-category" class="form-label fw-semibold small mb-1">Category</label>
+                <select id="parts-catalog-category" class="form-select form-select-sm"></select>
+              </div>
+              <div class="col-md-7">
+                <label for="parts-catalog-search" class="form-label fw-semibold small mb-1">Search Part</label>
+                <input id="parts-catalog-search" type="search" class="form-control form-control-sm" placeholder="Ryzen, Intel, RTX 4070, Seasonic, ProArt...">
+              </div>
+            </div>
+            <p id="parts-catalog-count" class="font-mono-data small text-secondary mb-2"></p>
+
+            <div class="table-responsive border border-dark mb-4" style="max-height: 460px; overflow-y: auto;">
+              <table class="table table-esd table-striped align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">Category</th>
+                    <th scope="col">Part</th>
+                    <th scope="col" class="text-end">Price</th>
+                    <th scope="col" class="text-end no-print">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="parts-catalog-tbody"></tbody>
+              </table>
+            </div>
+
+            <h3 class="h5 mb-2">Monthly Office IT Support Plans (B2B)</h3>
+            <div class="table-responsive">
+              <table class="table table-esd table-striped align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">Plan</th>
+                    <th scope="col">Limit</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Includes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Small Studio</strong></td>
+                    <td class="num-php">Up to 8 PCs</td>
+                    <td class="num-php fw-bold">₱12,000/mo</td>
+                    <td>15-min chat help, monthly checkups, 4-hr QC visit</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Office Standard</strong></td>
+                    <td class="num-php">Up to 15 PCs</td>
+                    <td class="num-php fw-bold">₱19,500/mo</td>
+                    <td>Biweekly checkups, security patches, 1 loaner PC</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Clinic &amp; Multi-Team</strong></td>
+                    <td class="num-php">Up to 25 PCs</td>
+                    <td class="num-php fw-bold">₱29,000/mo</td>
+                    <td>Weekly visits, backup check, 2 loaner PCs, 2-hr SLA</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <section class="stepper-band py-3 no-print" aria-label="Section navigation">
+    <div class="container-xxl d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <a href="/about" class="btn btn-ink-outline">Previous: About</a>
+      <a href="/market" class="btn btn-teal d-inline-flex align-items-center gap-2">
+        <span>Next: Target Market</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <footer class="esd-footer py-4">
+    <div class="container-xxl d-flex flex-wrap justify-content-between align-items-center gap-3 small">
+      <div><strong class="text-white">Nvidium</strong> · Unit 204, Esteban Abada Strip, Loyola Heights, Quezon City</div>
+      <div class="font-mono-data">Katipunan–Diliman Corridor · Quezon City</div>
+    </div>
+    <div class="container-xxl">
+      <div class="esd-vercel-watermark font-mono-data">Hosted on Vercel</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
+  <script src="./js/app.js" defer></script>
+</body>
+</html>

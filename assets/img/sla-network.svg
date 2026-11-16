@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 380" width="640" height="380" role="img" aria-label="Managed IT SLA Retainer network topology schematic">
+  <rect width="640" height="380" fill="#0D3A40"/>
+  <g stroke="rgba(242,244,242,0.08)" stroke-width="1">
+    <path d="M0 40H640M0 80H640M0 120H640M0 160H640M0 200H640M0 240H640M0 280H640M0 320H640"/>
+    <path d="M40 0V380M80 0V380M120 0V380M160 0V380M200 0V380M240 0V380M280 0V380M320 0V380M360 0V380M400 0V380M440 0V380M480 0V380M520 0V380M560 0V380M600 0V380"/>
+  </g>
+  <rect x="24" y="24" width="592" height="332" fill="none" stroke="#9FC2C5" stroke-width="1.5"/>
+  <rect x="64" y="138" width="160" height="104" fill="#13484F" stroke="#C8501F" stroke-width="2"/>
+  <text x="80" y="170" fill="#FFB38A" font-family="monospace" font-size="11">NVIDIUM NOC</text>
+  <text x="80" y="194" fill="#FFFFFF" font-family="monospace" font-size="14" font-weight="bold">RMM + Field Desk</text>
+  <text x="80" y="218" fill="#D4E1E2" font-family="monospace" font-size="11">15m Triage / 4h Site</text>
+  <path d="M224 190 H290 M290 98 V282 M290 98 H340 M290 190 H340 M290 282 H340" stroke="#9FC2C5" stroke-width="2" fill="none"/>
+  <rect x="340" y="64" width="236" height="66" fill="#09292E" stroke="#9FC2C5" stroke-width="1.5"/>
+  <text x="358" y="92" fill="#FFFFFF" font-family="monospace" font-size="13" font-weight="bold">Studio Care (Up to 8 Seats)</text>
+  <text x="358" y="114" fill="#FFB38A" font-family="monospace" font-size="12">₱12,000/mo · Monthly On-Site PM</text>
+  <rect x="340" y="156" width="236" height="66" fill="#09292E" stroke="#9FC2C5" stroke-width="1.5"/>
+  <text x="358" y="184" fill="#FFFFFF" font-family="monospace" font-size="13" font-weight="bold">SME Standard (Up to 15 Seats)</text>
+  <text x="358" y="206" fill="#FFB38A" font-family="monospace" font-size="12">₱19,500/mo · Bi-Weekly + Loaner</text>
+  <rect x="340" y="248" width="236" height="66" fill="#09292E" stroke="#C8501F" stroke-width="1.5"/>
+  <text x="358" y="276" fill="#FFFFFF" font-family="monospace" font-size="13" font-weight="bold">Clinic Pro (Up to 25 Seats)</text>
+  <text x="358" y="298" fill="#FFB38A" font-family="monospace" font-size="12">₱29,000/mo · Weekly + NAS Sync</text>
+</svg>

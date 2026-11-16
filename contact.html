@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Information — Nvidium Proposal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body data-page="contact" data-section-num="8">
+  <header class="sticky-top">
+    <nav class="navbar navbar-expand-xl esd-navbar" aria-label="Proposal Sections">
+      <div class="container-xxl">
+        <a class="navbar-brand" href="/">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" stroke="#F2F4F2" stroke-width="2"/>
+            <rect x="7" y="7" width="10" height="10" fill="#B94417"/>
+            <path d="M12 2V7M12 17V22M2 12H7M17 12H22" stroke="#9FC2C5" stroke-width="1.5"/>
+          </svg>
+          <span>Nvidium</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav me-auto mb-2 mb-xl-0 ms-xl-3 gap-xl-1">
+            <li class="nav-item"><a class="nav-link" data-nav="index" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="about" href="/about">About</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="services" href="/services">Services</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="market" href="/market">Market</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="marketing" href="/marketing">Marketing</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="operations" href="/operations">Operations</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="financials" href="/financials">Financials</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="contact" href="/contact">Contact</a></li>
+          </ul>
+          <a id="nav-quote-pill" class="quote-pill-nav d-inline-block mt-2 mt-xl-0" href="/checkout">Quote: ₱62,500</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div id="global-runtime-alert" class="alert alert-warning rounded-0 mb-0 d-none" role="alert"></div>
+
+    <section class="page-header-light">
+      <div class="container-xxl">
+        <h1>Contact</h1>
+        <p class="page-lead">Loyola Heights workshop info and quick inquiry form.</p>
+      </div>
+    </section>
+
+    <section class="py-4 py-lg-5">
+      <div class="container-xxl">
+        <div class="row g-4 align-items-start">
+          <div class="col-lg-5">
+            <div class="ledger-panel p-4 mb-4">
+              <h2 class="h4 mt-0 mb-2">Workshop</h2>
+              <p class="small mb-2">Unit 204, Esteban Abada Strip, Loyola Heights, QC</p>
+              <p class="font-mono-data small mb-2">Mon–Sat, 9 AM–7 PM · +63 2 8421 7790 / 0917 555 0184</p>
+              <p class="mb-2"><a class="font-mono-data small" href="mailto:proposals@nvidium.ph">proposals@nvidium.ph</a></p>
+              <div class="small d-flex flex-wrap gap-3">
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              </div>
+            </div>
+
+            <div id="attached-quote-panel" class="ledger-panel-dark spec-sheet-accent p-4 mb-4">
+              <div class="d-flex justify-content-between align-items-center gap-2 pb-2 mb-2 border-bottom border-light border-opacity-25">
+                <span class="font-mono-data small">Attached quote</span>
+                <button id="contact-detach-quote" type="button" class="btn btn-esd-outline btn-sm py-1 px-2 no-print">Detach</button>
+              </div>
+              <p id="contact-quote-tier" class="fw-bold mb-1">Architect &amp; 3D PC x 1</p>
+              <div class="d-flex justify-content-between align-items-baseline gap-2 mb-2">
+                <span class="small">Total <strong id="contact-quote-hardware" class="num-php ms-1">₱62,500</strong></span>
+                <span class="small">Today <strong id="contact-quote-deposit" class="num-php ms-1" style="color: var(--esd-copper-light);">₱43,750</strong></span>
+              </div>
+              <details class="esd-details esd-details-dark my-2">
+                <summary class="font-mono-data small">Parts, schedule &amp; support</summary>
+                <div class="pt-2 mt-2 border-top border-light border-opacity-25 small">
+                  <p id="contact-quote-provenance" class="font-mono-data mb-2" style="color: var(--esd-copper-light);">Starting Quote</p>
+                  <div id="contact-quote-parts" class="mb-2"></div>
+                  <div class="ledger-divider-row">
+                    <span>Payment Plan</span>
+                    <strong id="contact-quote-payplan" class="text-end">70/30 Split (0%)</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span id="contact-quote-deposit-label">Due Today (70%)</span>
+                    <span class="font-mono-data">Applied on checkout</span>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>Support Plan</span>
+                    <strong id="contact-quote-sla" class="num-php text-end">Free 1-Yr Warranty (₱0/mo)</strong>
+                  </div>
+                </div>
+              </details>
+              <div class="d-flex gap-2 mt-3 no-print">
+                <a id="contact-to-checkout" href="/checkout" class="btn btn-copper btn-sm flex-grow-1">Checkout</a>
+                <a href="/services" class="btn btn-esd-outline btn-sm">Edit Parts</a>
+              </div>
+            </div>
+
+            <div id="detached-quote-notice" class="ledger-panel p-4 d-none mb-4">
+              <p class="small mb-2">No PC quote attached.</p>
+              <button id="contact-reattach-quote" type="button" class="btn btn-teal btn-sm">Attach Quote</button>
+            </div>
+          </div>
+
+          <div class="col-lg-7">
+            <div class="ledger-panel p-4 p-lg-4 mb-4 no-print">
+              <h2 class="h3 mt-0 mb-1">Message Nvidium</h2>
+              <p class="small text-secondary mb-3">Ask a question or generate a printable slip.</p>
+
+              <form id="proposal-contact-form" novalidate>
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label for="contact-name" class="form-label fw-bold small">Name *</label>
+                    <input id="contact-name" type="text" class="form-control" required placeholder="Mateo Santos">
+                    <div class="invalid-feedback">Please enter your name.</div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="contact-email" class="form-label fw-bold small">Email *</label>
+                    <input id="contact-email" type="email" class="form-control" required placeholder="name@example.ph">
+                    <div class="invalid-feedback">Please enter a valid email.</div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="contact-phone" class="form-label fw-bold small">PH Mobile *</label>
+                    <input id="contact-phone" type="tel" class="form-control num-php" required placeholder="09171234567">
+                    <div class="invalid-feedback">Enter a valid PH mobile number (09XXXXXXXXX or +639XXXXXXXXX).</div>
+                  </div>
+                  <div class="col-12">
+                    <label for="contact-notes" class="form-label fw-bold small">Message (Optional)</label>
+                    <textarea id="contact-notes" class="form-control" rows="2" placeholder="Questions, apps used, or pickup time."></textarea>
+                  </div>
+                  <div class="col-12">
+                    <details class="esd-details">
+                      <summary class="font-mono-data small">Optional: order type, payment plan &amp; company</summary>
+                      <div class="row g-3 pt-2 mt-1">
+                        <div class="col-md-6">
+                          <label for="contact-buyer-type" class="form-label fw-bold small">Order Type</label>
+                          <select id="contact-buyer-type" class="form-select">
+                            <option value="b2c" selected>Personal / Student (B2C)</option>
+                            <option value="b2b">Business / Office (B2B)</option>
+                          </select>
+                        </div>
+                        <div class="col-md-6">
+                          <label for="contact-payment-plan" class="form-label fw-bold small">Payment Plan</label>
+                          <select id="contact-payment-plan" class="form-select"></select>
+                        </div>
+                        <div class="col-12">
+                          <label for="contact-org" class="form-label fw-bold small">Company / School</label>
+                          <input id="contact-org" type="text" class="form-control" placeholder="Optional for personal orders">
+                        </div>
+                      </div>
+                    </details>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-check">
+                      <input id="privacy-consent" class="form-check-input" type="checkbox" required>
+                      <label class="form-check-label small" for="privacy-consent">
+                        Saved locally on your device only (no server upload).
+                      </label>
+                      <div class="invalid-feedback">Please check this box to continue.</div>
+                    </div>
+                  </div>
+                  <div class="col-12 pt-1">
+                    <button type="submit" class="btn btn-copper">Create Quote Slip</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div id="dossier-confirmation-slip" class="ledger-panel p-4 d-none" aria-live="polite">
+              <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 mb-3 border-bottom border-dark">
+                <div>
+                  <h2 class="h4 my-0">Slip Ready</h2>
+                  <p class="small text-secondary mb-0">Subject to workshop part check</p>
+                </div>
+                <span id="slip-ref-id" class="status-chip status-chip-copper">NV-2026-0000</span>
+              </div>
+              <p class="mb-1 fw-bold" id="slip-client-line"></p>
+              <p class="small font-mono-data text-secondary mb-3" id="slip-contact-line"></p>
+              <details class="esd-details mb-3">
+                <summary class="font-mono-data small">View plain-text quote slip</summary>
+                <pre id="slip-summary-pre" class="p-3 mt-2 border border-dark bg-light small font-mono-data mb-0" style="white-space: pre-wrap;"></pre>
+              </details>
+              <div class="d-flex flex-wrap gap-2 no-print">
+                <button id="print-dossier-btn" type="button" class="btn btn-teal btn-sm">Print / PDF</button>
+                <button id="copy-dossier-btn" type="button" class="btn btn-ink-outline btn-sm">Copy</button>
+                <a id="mailto-dossier-link" href="mailto:proposals@nvidium.ph" class="btn btn-ink-outline btn-sm">Email Draft</a>
+              </div>
+              <div id="copy-feedback" class="small font-mono-data mt-2 text-success"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="stepper-band py-3 no-print" aria-label="Section navigation">
+    <div class="container-xxl d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <a href="/financials" class="btn btn-ink-outline">Previous: Financials</a>
+      <a href="/" class="btn btn-teal">Back to Home</a>
+    </div>
+  </section>
+
+  <footer class="esd-footer py-4">
+    <div class="container-xxl d-flex flex-wrap justify-content-between align-items-center gap-3 small">
+      <div><strong class="text-white">Nvidium</strong> · Unit 204, Esteban Abada Strip, Loyola Heights, Quezon City</div>
+      <div class="font-mono-data">Katipunan–Diliman Corridor · Quezon City</div>
+    </div>
+    <div class="container-xxl">
+      <div class="esd-vercel-watermark font-mono-data">Hosted on Vercel</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
+  <script src="./js/app.js" defer></script>
+</body>
+</html>

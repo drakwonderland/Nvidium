@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 380" width="640" height="380" role="img" aria-label="Campus CAD and Code Rig architectural schematic">
+  <rect width="640" height="380" fill="#0D3A40"/>
+  <g stroke="rgba(242,244,242,0.08)" stroke-width="1">
+    <path d="M0 40H640M0 80H640M0 120H640M0 160H640M0 200H640M0 240H640M0 280H640M0 320H640"/>
+    <path d="M40 0V380M80 0V380M120 0V380M160 0V380M200 0V380M240 0V380M280 0V380M320 0V380M360 0V380M400 0V380M440 0V380M480 0V380M520 0V380M560 0V380M600 0V380"/>
+  </g>
+  <rect x="24" y="24" width="592" height="332" fill="none" stroke="#9FC2C5" stroke-width="1.5"/>
+  <rect x="84" y="64" width="210" height="252" fill="#13484F" stroke="#F2F4F2" stroke-width="2"/>
+  <rect x="98" y="80" width="182" height="28" fill="#0D3A40" stroke="#9FC2C5" stroke-width="1"/>
+  <circle cx="114" cy="94" r="4" fill="#C8501F"/>
+  <text x="128" y="98" fill="#D4E1E2" font-family="monospace" font-size="11">CHASSIS // MATX AIRFLOW</text>
+  <rect x="106" y="122" width="166" height="172" fill="#09292E" stroke="#9FC2C5" stroke-width="1.2"/>
+  <rect x="124" y="142" width="58" height="58" fill="#165760" stroke="#F2F4F2" stroke-width="1.5"/>
+  <circle cx="153" cy="171" r="18" fill="none" stroke="#C8501F" stroke-width="2"/>
+  <rect x="200" y="142" width="10" height="52" fill="#9FC2C5"/>
+  <rect x="216" y="142" width="10" height="52" fill="#9FC2C5"/>
+  <rect x="120" y="220" width="138" height="30" fill="#C8501F" opacity="0.9"/>
+  <text x="130" y="239" fill="#FFFFFF" font-family="monospace" font-size="11" font-weight="bold">RTX 4060 8GB</text>
+  <rect x="120" y="262" width="108" height="22" fill="#13484F" stroke="#9FC2C5" stroke-width="1"/>
+  <text x="128" y="277" fill="#D4E1E2" font-family="monospace" font-size="10">650W 80+ GOLD</text>
+  <g font-family="monospace" fill="#F2F4F2">
+    <text x="330" y="92" font-size="12" fill="#FFB38A">TIER 01 // STUDENT &amp; DEV</text>
+    <text x="330" y="124" font-size="22" font-weight="bold">Campus CAD &amp; Code</text>
+    <line x1="330" y1="142" x2="584" y2="142" stroke="#9FC2C5" stroke-width="1"/>
+    <text x="330" y="172" font-size="13" fill="#D4E1E2">CPU   Ryzen 5 7600 (6C/12T)</text>
+    <text x="330" y="198" font-size="13" fill="#D4E1E2">RAM   32GB DDR5-6000 Dual</text>
+    <text x="330" y="224" font-size="13" fill="#D4E1E2">DISK  1TB Gen4 NVMe TLC</text>
+    <text x="330" y="250" font-size="13" fill="#D4E1E2">TEST  24H OCCT Thermal Pass</text>
+    <rect x="330" y="276" width="246" height="40" fill="#C8501F"/>
+    <text x="346" y="301" font-size="14" font-weight="bold" fill="#FFFFFF">70% PO DEPOSIT · 1YR LABOR</text>
+  </g>
+</svg>

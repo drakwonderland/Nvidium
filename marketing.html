@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketing Strategy — Nvidium Proposal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body data-page="marketing" data-section-num="5">
+  <header class="sticky-top">
+    <nav class="navbar navbar-expand-xl esd-navbar" aria-label="Proposal Sections">
+      <div class="container-xxl">
+        <a class="navbar-brand" href="/">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" stroke="#F2F4F2" stroke-width="2"/>
+            <rect x="7" y="7" width="10" height="10" fill="#B94417"/>
+            <path d="M12 2V7M12 17V22M2 12H7M17 12H22" stroke="#9FC2C5" stroke-width="1.5"/>
+          </svg>
+          <span>Nvidium</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav me-auto mb-2 mb-xl-0 ms-xl-3 gap-xl-1">
+            <li class="nav-item"><a class="nav-link" data-nav="index" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="about" href="/about">About</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="services" href="/services">Services</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="market" href="/market">Market</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="marketing" href="/marketing">Marketing</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="operations" href="/operations">Operations</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="financials" href="/financials">Financials</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="contact" href="/contact">Contact</a></li>
+          </ul>
+          <a id="nav-quote-pill" class="quote-pill-nav d-inline-block mt-2 mt-xl-0" href="/contact">Quote: ₱62,500 + ₱12,000/mo</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div id="global-runtime-alert" class="alert alert-warning rounded-0 mb-0 d-none" role="alert"></div>
+
+    <section class="page-header-light">
+      <div class="container-xxl">
+        <h1>How We Reach Customers</h1>
+        <p class="page-lead">
+          Campus demos, Google Maps search, and free office checkups on a ₱9,000 monthly budget.
+        </p>
+      </div>
+    </section>
+
+    <section class="py-4 py-lg-5">
+      <div class="container-xxl">
+        <div class="proof-strip mb-4">
+          <article class="proof-strip-item">
+            <h2>Offer</h2>
+            <p>Tested custom PCs and 4-hour local office IT support.</p>
+          </article>
+          <article class="proof-strip-item">
+            <h2>Pricing</h2>
+            <p>List-price parts, ₱2,500 build fee, and ₱12k–₱29k office plans.</p>
+          </article>
+          <article class="proof-strip-item">
+            <h2>Shop location</h2>
+            <p>Esteban Abada, Loyola Heights (8 km neighborhood zone).</p>
+          </article>
+          <article class="proof-strip-item">
+            <h2>Outreach</h2>
+            <p>Campus build clinics, Google Maps, and client referrals.</p>
+          </article>
+        </div>
+
+        <div class="row g-4 align-items-stretch" id="marketing-calculator">
+          <div class="col-lg-7">
+            <div class="ledger-panel p-4 h-100 d-flex flex-column justify-content-between">
+              <div>
+                <h2 class="h4 mt-0 mb-1">Monthly Promo Budget</h2>
+                <p class="small text-secondary mb-3">Move the sliders to estimate inquiries and new customers.</p>
+
+                <div class="mb-3">
+                  <label for="mkt-campus-spend" class="form-label d-flex justify-content-between small fw-bold">
+                    <span>Campus Demos &amp; Flyers</span>
+                    <span id="mkt-campus-out" class="num-php">₱3,500</span>
+                  </label>
+                  <input id="mkt-campus-spend" type="range" class="form-range" min="0" max="30000" step="500" value="3500">
+                </div>
+
+                <div class="mb-3">
+                  <label for="mkt-search-spend" class="form-label d-flex justify-content-between small fw-bold">
+                    <span>Google Maps &amp; Search Ads</span>
+                    <span id="mkt-search-out" class="num-php">₱3,000</span>
+                  </label>
+                  <input id="mkt-search-spend" type="range" class="form-range" min="0" max="30000" step="500" value="3000">
+                </div>
+
+                <div class="mb-3">
+                  <label for="mkt-b2b-spend" class="form-label d-flex justify-content-between small fw-bold">
+                    <span>Free Office Checkup Visits</span>
+                    <span id="mkt-b2b-out" class="num-php">₱2,500</span>
+                  </label>
+                  <input id="mkt-b2b-spend" type="range" class="form-range" min="0" max="30000" step="500" value="2500">
+                </div>
+
+                <details class="esd-details mb-3">
+                  <summary class="font-mono-data small">Optional: inquiry-to-order rate (<span id="mkt-conv-out" class="num-php">18%</span>)</summary>
+                  <div class="pt-2 mt-1">
+                    <input id="mkt-conv-rate" type="range" class="form-range" min="5" max="45" step="1" value="18" aria-label="Inquiries that become orders percentage">
+                  </div>
+                </details>
+              </div>
+
+              <div class="ledger-panel-dark p-3" aria-live="polite">
+                <div class="ledger-divider-row">
+                  <span>Monthly Budget</span>
+                  <strong id="mkt-total-budget" class="num-php fs-5">₱9,000 / mo</strong>
+                </div>
+                <div class="ledger-divider-row">
+                  <span>Inquiries Expected</span>
+                  <strong id="mkt-leads-out" class="num-php">38 / mo</strong>
+                </div>
+                <div class="ledger-divider-row">
+                  <span>New Paying Customers</span>
+                  <strong id="mkt-won-out" class="num-php">7 / mo</strong>
+                </div>
+                <div class="ledger-divider-row">
+                  <span>Ad Cost per Customer</span>
+                  <strong id="mkt-cac-out" class="num-php" style="color: var(--esd-copper-light);">₱1,286</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-5">
+            <div class="ledger-panel p-4 h-100">
+              <h2 class="h4 mt-0 mb-3">Seasonal Promos</h2>
+              <div class="table-responsive">
+                <table class="table table-esd table-striped align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th scope="col">Quarter</th>
+                      <th scope="col">Promo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="num-php fw-bold">Q1</td>
+                      <td>₱1,000 off student builds + free advice clinic</td>
+                    </tr>
+                    <tr>
+                      <td class="num-php fw-bold">Q2</td>
+                      <td>Free 1-hour Wi-Fi &amp; backup check for clinics</td>
+                    </tr>
+                    <tr>
+                      <td class="num-php fw-bold">Q3</td>
+                      <td>1 free maintenance visit per business referral</td>
+                    </tr>
+                    <tr>
+                      <td class="num-php fw-bold">Q4</td>
+                      <td>Batch discounts for school labs &amp; offices</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="stepper-band py-3 no-print" aria-label="Section navigation">
+    <div class="container-xxl d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <a href="/market" class="btn btn-ink-outline">Previous: Market</a>
+      <a href="/operations" class="btn btn-teal d-inline-flex align-items-center gap-2">
+        <span>Next: Operations</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <footer class="esd-footer py-4">
+    <div class="container-xxl d-flex flex-wrap justify-content-between align-items-center gap-3 small">
+      <div><strong class="text-white">Nvidium</strong> · Unit 204, Esteban Abada Strip, Loyola Heights, Quezon City</div>
+      <div class="font-mono-data">Katipunan–Diliman Corridor · Quezon City</div>
+    </div>
+    <div class="container-xxl">
+      <div class="esd-vercel-watermark font-mono-data">Hosted on Vercel</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
+  <script src="./js/app.js" defer></script>
+</body>
+</html>

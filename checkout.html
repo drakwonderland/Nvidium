@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout &amp; Order Confirmation — Nvidium</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/styles.css?v=7">
+</head>
+<body data-page="checkout" data-section-num="8">
+  <header class="sticky-top">
+    <nav class="navbar navbar-expand-xl esd-navbar" aria-label="Proposal Sections">
+      <div class="container-xxl">
+        <a class="navbar-brand" href="/">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" stroke="#F2F4F2" stroke-width="2"/>
+            <rect x="7" y="7" width="10" height="10" fill="#B94417"/>
+            <path d="M12 2V7M12 17V22M2 12H7M17 12H22" stroke="#9FC2C5" stroke-width="1.5"/>
+          </svg>
+          <span>Nvidium</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav me-auto mb-2 mb-xl-0 ms-xl-3 gap-xl-1">
+            <li class="nav-item"><a class="nav-link" data-nav="index" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="about" href="/about">About</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="services" href="/services">Services</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="market" href="/market">Market</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="marketing" href="/marketing">Marketing</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="operations" href="/operations">Operations</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="financials" href="/financials">Financials</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="contact" href="/contact">Contact</a></li>
+            <li class="nav-item"><a class="nav-link active" data-nav="checkout" href="/checkout" aria-current="page">Checkout</a></li>
+          </ul>
+          <a id="nav-quote-pill" class="quote-pill-nav d-inline-block mt-2 mt-xl-0" href="/checkout">Quote: ₱62,500</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div id="global-runtime-alert" class="alert alert-warning rounded-0 mb-0 d-none" role="alert"></div>
+
+    <section class="py-4 py-lg-5">
+      <div class="container" id="checkout-app">
+        <div class="checkout-shell mx-auto">
+          <h1 id="chk-page-title" class="h2 text-center mb-3">Checkout</h1>
+
+          <aside id="checkout-summary-panel" class="ledger-panel-dark p-3 p-sm-4 mb-3" aria-live="polite">
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <span id="chk-buyer-badge" class="font-mono-data small" style="color: var(--esd-copper-light);">Personal (B2C)</span>
+                </div>
+                <p id="chk-build-title" class="fw-semibold mb-0">Architect &amp; 3D PC x 1</p>
+                <p id="chk-build-specs" class="small mb-0" style="color: var(--esd-teal-tint);">Ryzen 7 7700 · 64GB DDR5 · 2TB · RTX 4060 Ti</p>
+              </div>
+              <div class="text-end text-nowrap">
+                <strong id="chk-due-today" class="num-php fs-4 d-block" style="color: var(--esd-copper-light);">₱43,750</strong>
+                <span id="chk-due-today-label" class="small" style="color: var(--esd-teal-tint);">Paid (70%)</span>
+              </div>
+            </div>
+
+            <details class="esd-details esd-details-dark mt-3">
+              <summary class="font-mono-data small">Price &amp; parts breakdown</summary>
+              <div class="pt-2 mt-2 border-top border-light border-opacity-25 small">
+                <div id="chk-parts-list" class="mb-2"></div>
+                <div class="ledger-divider-row">
+                  <span>Parts</span>
+                  <strong id="chk-hardware-total" class="num-php">₱62,500</strong>
+                </div>
+                <div class="ledger-divider-row">
+                  <span>Fee</span>
+                  <strong id="chk-installment-fee" class="num-php">₱0 (0% Fee)</strong>
+                </div>
+                <div class="ledger-divider-row">
+                  <span>Pickup / Delivery</span>
+                  <strong id="chk-delivery-fee" class="num-php text-end">₱0 (Pickup)</strong>
+                </div>
+                <div class="ledger-divider-row">
+                  <span>Total</span>
+                  <strong id="chk-total-payable" class="num-php">₱62,500</strong>
+                </div>
+                <div class="ledger-divider-row">
+                  <span id="chk-remaining-label">Due on Pickup (30%)</span>
+                  <strong id="chk-remaining-amount" class="num-php">₱18,750</strong>
+                </div>
+                <div class="ledger-divider-row">
+                  <span>Warranty</span>
+                  <strong id="chk-sla-monthly" class="num-php text-end">Free 1-Yr (₱0/mo)</strong>
+                </div>
+                <div class="mt-2 no-print">
+                  <a id="chk-edit-parts-link" href="/services" class="btn btn-esd-outline btn-sm w-100">Edit PC parts</a>
+                </div>
+              </div>
+            </details>
+          </aside>
+
+          <div id="checkout-form-panel" class="ledger-panel p-4 mb-4 no-print">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 mb-3 border-bottom border-dark">
+              <h2 class="h5 my-0">Delivery Details</h2>
+              <div class="d-flex gap-2">
+                <button id="chk-fill-demo-btn" type="button" class="btn btn-ink-outline btn-sm">Sample</button>
+                <button id="chk-instant-demo-btn" type="button" class="btn btn-teal btn-sm">Quick Confirm</button>
+              </div>
+            </div>
+
+            <form id="checkout-order-form" novalidate>
+              <div class="btn-group w-100 mb-3" role="group" aria-label="Order Type">
+                <button type="button" class="btn btn-ink-outline btn-sm w-50 is-active" data-chk-buyer="b2c" aria-pressed="true">
+                  Personal (B2C)
+                </button>
+                <button type="button" class="btn btn-ink-outline btn-sm w-50" data-chk-buyer="b2b" aria-pressed="false">
+                  Business (B2B)
+                </button>
+              </div>
+
+              <div class="row g-2 mb-3">
+                <div class="col-sm-6">
+                  <label for="chk-payment-plan" class="form-label fw-semibold small mb-1">Payment</label>
+                  <select id="chk-payment-plan" class="form-select form-select-sm"></select>
+                </div>
+                <div class="col-sm-6">
+                  <label for="chk-fulfillment" class="form-label fw-semibold small mb-1">Pickup / Delivery</label>
+                  <select id="chk-fulfillment" class="form-select form-select-sm">
+                    <option value="pickup" selected>Workshop Pickup (₱0)</option>
+                    <option value="delivery-qc">QC Courier (+₱350)</option>
+                    <option value="onsite-b2b">Office Setup (₱0)</option>
+                  </select>
+                </div>
+                <div class="col-12 pt-1">
+                  <div class="form-check">
+                    <input id="chk-pay-full" class="form-check-input" type="checkbox">
+                    <label class="form-check-label small" for="chk-pay-full">
+                      Paid 100% upfront
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row g-2 mb-3">
+                <div class="col-12">
+                  <label for="chk-name" class="form-label fw-semibold small mb-1">Full Name</label>
+                  <input id="chk-name" type="text" class="form-control" required placeholder="Mateo Santos">
+                  <div class="invalid-feedback">Enter your full name.</div>
+                </div>
+                <div class="col-sm-6">
+                  <label for="chk-email" class="form-label fw-semibold small mb-1">Email</label>
+                  <input id="chk-email" type="email" class="form-control" required placeholder="name@example.ph">
+                  <div class="invalid-feedback">Enter a valid email.</div>
+                </div>
+                <div class="col-sm-6">
+                  <label for="chk-phone" class="form-label fw-semibold small mb-1">Mobile</label>
+                  <input id="chk-phone" type="tel" class="form-control num-php" required placeholder="09171234567">
+                  <div class="invalid-feedback">Enter a valid PH mobile number.</div>
+                </div>
+                <div class="col-12 pt-1">
+                  <details class="esd-details">
+                    <summary class="font-mono-data small">Company or delivery address (optional)</summary>
+                    <div class="row g-2 pt-2 mt-1">
+                      <div class="col-sm-6">
+                        <label for="chk-org" class="form-label fw-semibold small mb-1">Company / School</label>
+                        <input id="chk-org" type="text" class="form-control form-control-sm" placeholder="Optional">
+                      </div>
+                      <div class="col-sm-6">
+                        <label for="chk-address" class="form-label fw-semibold small mb-1">Address / Pickup Time</label>
+                        <input id="chk-address" type="text" class="form-control form-control-sm" placeholder="Optional">
+                      </div>
+                    </div>
+                  </details>
+                </div>
+              </div>
+
+              <button id="chk-submit-btn" type="submit" class="btn btn-copper w-100">Complete Order · ₱43,750</button>
+            </form>
+          </div>
+
+          <div id="checkout-success-panel" class="ledger-panel checkout-confirm-card p-4 text-center d-none" aria-live="polite">
+            <div class="esd-success-banner mb-3">
+              <div class="d-flex flex-column align-items-center gap-2">
+                <div id="ord-animated-seal" class="esd-seal-wrap" aria-hidden="true">
+                  <div id="ord-lottie-stage" class="esd-lottie-stage">
+                    <dotlottie-wc id="ord-dotlottie-player" src="./assets/lottie/payment-success.lottie"></dotlottie-wc>
+                  </div>
+                  <svg class="esd-seal-svg esd-seal-fallback" width="96" height="96" viewBox="0 0 96 96" fill="none">
+                    <circle class="esd-seal-bg" cx="48" cy="48" r="39" fill="#13484F"/>
+                    <circle class="esd-seal-frame" cx="48" cy="48" r="39" stroke="#FFB38A" stroke-width="2.75" stroke-linecap="round" transform="rotate(-90 48 48)"/>
+                    <path class="esd-seal-path" d="M31 49L42 60L66 36" stroke="#FFB38A" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="h3 mt-0 mb-1">Order Confirmed</h2>
+                  <p id="ord-banner-sub" class="small text-secondary mb-2 mx-auto">Build slot locked · Ready in 5 business days.</p>
+                  <span id="ord-status-pill" class="status-chip status-chip-copper">Paid · Confirmed</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="esd-calibration-track mb-3" aria-hidden="true">
+              <div id="ord-calibration-bar" class="esd-calibration-fill"></div>
+            </div>
+
+            <div id="ord-live-timeline" class="esd-order-tracker esd-order-tracker-3 mb-3 text-start">
+              <div class="esd-tracker-step is-current">
+                <span class="font-mono-data">Step 1</span>
+                <strong>Confirmed</strong>
+              </div>
+              <div class="esd-tracker-step">
+                <span class="font-mono-data">Days 1–3</span>
+                <strong>Build &amp; 24h Test</strong>
+              </div>
+              <div class="esd-tracker-step">
+                <span class="font-mono-data">Day 5</span>
+                <strong>Pickup / Delivery</strong>
+              </div>
+            </div>
+
+            <div class="esd-receipt-rows text-start mb-3">
+              <div class="ledger-divider-row">
+                <span>Reference</span>
+                <strong id="ord-ref-id" class="num-php">NV-ORD-2026-0000</strong>
+              </div>
+              <div class="ledger-divider-row">
+                <span>Status</span>
+                <strong id="ord-payment-status" class="text-end small">Paid</strong>
+              </div>
+              <div class="ledger-divider-row">
+                <span>Paid Today</span>
+                <strong id="ord-paid-today" class="num-php fs-5">₱43,750</strong>
+              </div>
+              <div class="ledger-divider-row">
+                <span>Remaining</span>
+                <strong id="ord-remaining-summary" class="num-php text-end small"></strong>
+              </div>
+              <div class="ledger-divider-row">
+                <span>Fulfillment</span>
+                <strong id="ord-fulfillment-summary" class="text-end small"></strong>
+              </div>
+            </div>
+
+            <details class="esd-details text-start mb-3">
+              <summary class="font-mono-data small">View receipt</summary>
+              <pre id="ord-receipt-pre" class="p-3 mt-2 border border-dark bg-light small font-mono-data mb-0" style="white-space: pre-wrap;"></pre>
+            </details>
+
+            <div class="d-flex flex-wrap justify-content-center gap-2 no-print">
+              <button id="ord-print-btn" type="button" class="btn btn-teal btn-sm">Print</button>
+              <button id="ord-copy-btn" type="button" class="btn btn-ink-outline btn-sm">Copy</button>
+              <button id="ord-edit-btn" type="button" class="btn btn-ink-outline btn-sm">Edit</button>
+              <button id="ord-replay-anim-btn" type="button" class="btn btn-copper btn-sm">Replay Animation</button>
+            </div>
+            <div id="ord-copy-feedback" class="small font-mono-data mt-2 text-success"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="stepper-band py-3 no-print" aria-label="Section navigation">
+    <div class="container-xxl d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <a href="/services" class="btn btn-ink-outline">Back to PC Builder</a>
+      <a href="/contact" class="btn btn-teal">Workshop Contact Page</a>
+    </div>
+  </section>
+
+  <footer class="esd-footer py-4">
+    <div class="container-xxl d-flex flex-wrap justify-content-between align-items-center gap-3 small">
+      <div><strong class="text-white">Nvidium</strong> · Unit 204, Esteban Abada Strip, Loyola Heights, Quezon City</div>
+      <div class="font-mono-data">Katipunan–Diliman Corridor · Quezon City</div>
+    </div>
+    <div class="container-xxl">
+      <div class="esd-vercel-watermark font-mono-data">Hosted on Vercel</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
+  <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.5/dist/dotlottie-wc.js" type="module"></script>
+  <script src="./js/app.js?v=10" defer></script>
+</body>
+</html>

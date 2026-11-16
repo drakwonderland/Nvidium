@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financial Proposal — Nvidium Proposal</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body data-page="financials" data-section-num="7">
+  <header class="sticky-top">
+    <nav class="navbar navbar-expand-xl esd-navbar" aria-label="Proposal Sections">
+      <div class="container-xxl">
+        <a class="navbar-brand" href="/">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" stroke="#F2F4F2" stroke-width="2"/>
+            <rect x="7" y="7" width="10" height="10" fill="#B94417"/>
+            <path d="M12 2V7M12 17V22M2 12H7M17 12H22" stroke="#9FC2C5" stroke-width="1.5"/>
+          </svg>
+          <span>Nvidium</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav me-auto mb-2 mb-xl-0 ms-xl-3 gap-xl-1">
+            <li class="nav-item"><a class="nav-link" data-nav="index" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="about" href="/about">About</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="services" href="/services">Services</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="market" href="/market">Market</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="marketing" href="/marketing">Marketing</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="operations" href="/operations">Operations</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="financials" href="/financials">Financials</a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="contact" href="/contact">Contact</a></li>
+          </ul>
+          <a id="nav-quote-pill" class="quote-pill-nav d-inline-block mt-2 mt-xl-0" href="/checkout">Quote: ₱62,500</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div id="global-runtime-alert" class="alert alert-warning rounded-0 mb-0 d-none" role="alert"></div>
+
+    <section class="page-header-light">
+      <div class="container-xxl">
+        <h1>Financial &amp; Payment Options</h1>
+        <p class="page-lead">
+          Personal and business PC payment plans, alongside Nvidium’s ₱345,000 workshop budget and profit forecast.
+        </p>
+      </div>
+    </section>
+
+    <section class="py-4 py-lg-5">
+      <div class="container-xxl" id="financial-simulator">
+        <div id="fin-view-tabs" class="row g-2 mb-4 no-print" role="group" aria-label="Choose Finances View">
+          <div class="col-md-4">
+            <button type="button" class="stage-btn is-active" data-fin-tab="both" aria-pressed="true">Show Both Views</button>
+          </div>
+          <div class="col-md-4">
+            <button type="button" class="stage-btn" data-fin-tab="customer" aria-pressed="false">For Buyers: My Order &amp; Installments</button>
+          </div>
+          <div class="col-md-4">
+            <button type="button" class="stage-btn" data-fin-tab="business" aria-pressed="false">Business Proposal: Startup &amp; Profit</button>
+          </div>
+        </div>
+
+        <section id="customer-payment-section" class="mb-5" aria-labelledby="customer-pay-heading">
+          <div id="customer-payment-calculator" class="row g-4 align-items-stretch">
+            <div class="col-lg-6">
+              <div class="ledger-panel p-4 p-lg-4 h-100">
+                <h2 id="customer-pay-heading" class="h3 mt-0 mb-1">Your PC Payment Plan</h2>
+                <p class="small text-secondary mb-4">Pick how you want to pay for your build.</p>
+
+                <div class="mb-4">
+                  <p class="h6 fw-bold mb-2">1. Ordering As</p>
+                  <div class="row g-2">
+                    <div class="col-sm-6">
+                      <button type="button" class="stage-btn is-active" data-fin-buyer="b2c" aria-pressed="true">
+                        <span class="fw-bold d-block">Personal / Student (B2C)</span>
+                        <span class="small d-block">Split pay or monthly plan</span>
+                      </button>
+                    </div>
+                    <div class="col-sm-6">
+                      <button type="button" class="stage-btn" data-fin-buyer="b2b" aria-pressed="false">
+                        <span class="fw-bold d-block">Company / Office (B2B)</span>
+                        <span class="small d-block">50/50 PO + BIR Invoice</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <p class="h6 fw-bold mb-2">2. Payment Schedule</p>
+                  <div class="d-grid gap-2">
+                    <button type="button" class="stage-btn is-active" data-pay-plan="split-70-30" aria-pressed="true">
+                      <span class="fw-bold d-block">70% Down / 30% on Pickup</span>
+                      <span class="small d-block">0% extra fee.</span>
+                    </button>
+                    <button type="button" class="stage-btn" data-pay-plan="inst-3" aria-pressed="false">
+                      <span class="fw-bold d-block">3 Months — 0% Interest</span>
+                      <span class="small d-block">30% down, then 3 monthly payments.</span>
+                    </button>
+                    <button type="button" class="stage-btn" data-pay-plan="inst-6" aria-pressed="false">
+                      <span class="fw-bold d-block">6 Months — 5% Fee</span>
+                      <span class="small d-block">30% down, then 6 monthly payments.</span>
+                    </button>
+                    <button type="button" class="stage-btn" data-pay-plan="inst-12" aria-pressed="false">
+                      <span class="fw-bold d-block">12 Months — 10% Fee</span>
+                      <span class="small d-block">30% down, then 12 monthly payments.</span>
+                    </button>
+                    <button type="button" class="stage-btn" data-pay-plan="b2b-po" aria-pressed="false">
+                      <span class="fw-bold d-block">Company PO (50% Down / 50% Delivery)</span>
+                      <span class="small d-block">Includes Sales Invoice &amp; BIR 2307.</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="ledger-panel-dark spec-sheet-accent p-4 p-lg-4 h-100 d-flex flex-column justify-content-between" aria-live="polite">
+                <div>
+                  <div class="d-flex justify-content-between align-items-center pb-2 mb-3 border-bottom border-light border-opacity-25 font-mono-data small">
+                    <span>Payment summary</span>
+                    <span id="pay-buyer-badge" style="color: var(--esd-copper-light);">Personal (B2C)</span>
+                  </div>
+                  <p id="pay-quote-name" class="fw-bold fs-5 mb-1">Architect &amp; 3D PC x 1</p>
+                  <p id="pay-quote-specs" class="small mb-3" style="color: var(--esd-teal-tint);">Ryzen 7 7700 · 64GB DDR5 · Lexar NM790 2TB · RTX 4060 Ti 8GB</p>
+
+                  <div class="ledger-divider-row">
+                    <span>Parts Price</span>
+                    <strong id="pay-hardware-total" class="num-php">₱62,500</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>Installment Fee</span>
+                    <strong id="pay-installment-fee" class="num-php">₱0 (0% Interest)</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>Total Price</span>
+                    <strong id="pay-total-payable" class="num-php fs-5">₱62,500</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span id="pay-due-today-label" class="fw-bold">Paid / Down Today (70%)</span>
+                    <strong id="pay-due-today" class="num-php fs-4" style="color: var(--esd-copper-light);">₱43,750</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span id="pay-completion-label">Due on Pickup (30%)</span>
+                    <strong id="pay-completion" class="num-php">₱18,750</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>Monthly Payment</span>
+                    <strong id="pay-monthly-installment" class="num-php">₱0 / mo</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>Monthly Support</span>
+                    <strong id="pay-support-monthly" class="num-php text-end">₱0 / mo (1-Yr Free Warranty)</strong>
+                  </div>
+                  <p id="pay-plan-note" class="small mt-3 mb-0" style="color: var(--esd-teal-tint);"></p>
+                </div>
+
+                <div class="d-grid gap-2 mt-4 no-print">
+                  <a id="pay-checkout-link" href="/checkout" class="btn btn-copper d-inline-flex align-items-center justify-content-center gap-2">
+                    <span>Go to Order Confirmation</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                  </a>
+                  <a id="pay-edit-build-link" href="/services" class="btn btn-esd-outline">Change PC Parts</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div id="business-proposal-section">
+          <div class="pb-3 mb-4 border-bottom border-dark">
+            <h2 class="h3 mt-0 mb-1">Nvidium Business Proposal Financials (Startup, Profit &amp; Break-Even)</h2>
+            <p class="small text-secondary mb-0">Shop budget, BIR taxes, and 12-month cash forecast for the digital business proposal.</p>
+          </div>
+          <div class="row g-4 mb-5">
+          <div class="col-lg-6">
+            <div class="ledger-panel p-4 h-100">
+              <h2 class="h4 mt-0 mb-3">Startup Costs Breakdown</h2>
+              <div class="table-responsive">
+                <table class="table table-esd table-striped align-middle">
+                  <thead>
+                    <tr>
+                      <th scope="col">Startup Item</th>
+                      <th scope="col" class="text-end">Estimated Cost</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Workbenches, Build Tools, Backup UPS &amp; Test Equipment</td>
+                      <td class="num-php text-end">₱58,000</td>
+                    </tr>
+                    <tr>
+                      <td>2 Spare Loaner Computers + Replacement Spares</td>
+                      <td class="num-php text-end">₱65,000</td>
+                    </tr>
+                    <tr>
+                      <td>Shop Rent Deposit (2+1 Months) &amp; Light Setup</td>
+                      <td class="num-php text-end">₱96,000</td>
+                    </tr>
+                    <tr>
+                      <td>DTI, Barangay, QC Mayor’s Permit, BIR &amp; Software Setup</td>
+                      <td class="num-php text-end">₱36,000</td>
+                    </tr>
+                    <tr>
+                      <td>3-Month Cash Safety Buffer</td>
+                      <td class="num-php text-end">₱90,000</td>
+                    </tr>
+                    <tr class="table-secondary fw-bold">
+                      <td>Total Startup Budget Needed</td>
+                      <td class="num-php text-end">₱345,000</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="ledger-panel p-4 h-100">
+              <h2 class="h4 mt-0 mb-3">Monthly Fixed Bills</h2>
+              <div class="table-responsive">
+                <table class="table table-esd table-striped align-middle">
+                  <thead>
+                    <tr>
+                      <th scope="col">Monthly Expense</th>
+                      <th scope="col" class="text-end">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Loyola Heights 28 sqm Workshop Rent</td>
+                      <td class="num-php text-end">₱28,000</td>
+                    </tr>
+                    <tr>
+                      <td>Dual-Fiber Internet &amp; Electricity</td>
+                      <td class="num-php text-end">₱7,500</td>
+                    </tr>
+                    <tr>
+                      <td>Staff Pay (1 Technician + Part-Time Bookkeeper + Benefits)</td>
+                      <td class="num-php text-end">₱44,000</td>
+                    </tr>
+                    <tr>
+                      <td>Remote Support &amp; Accounting Software</td>
+                      <td class="num-php text-end">₱6,000</td>
+                    </tr>
+                    <tr>
+                      <td>Local Marketing Budget (Campus, Search &amp; Office Visits)</td>
+                      <td class="num-php text-end">₱9,000</td>
+                    </tr>
+                    <tr class="table-secondary fw-bold">
+                      <td>Total Monthly Fixed Costs (Up to 14 PCs / 35 Supported PCs)</td>
+                      <td class="num-php text-end">₱94,500</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ledger-panel p-4 p-lg-4 mb-5">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+            <div>
+              <h2 class="h3 my-0">Monthly Profit &amp; Break-Even Calculator</h2>
+              <p id="fin-context-badge" class="font-mono-data small text-secondary mb-0">Default Studio Estimates</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2 no-print">
+              <button id="fin-import-quote-btn" type="button" class="btn btn-teal btn-sm">Use My Saved Build Price</button>
+              <button id="fin-reset-baseline-btn" type="button" class="btn btn-ink-outline btn-sm">Reset Defaults</button>
+            </div>
+          </div>
+
+          <div class="row g-4">
+            <div class="col-lg-5">
+              <div class="mb-3">
+                <label for="fin-builds-mo" class="form-label d-flex justify-content-between small fw-bold">
+                  <span>Custom PCs Sold per Month</span>
+                  <span id="fin-builds-val" class="num-php">9 PCs/mo</span>
+                </label>
+                <input id="fin-builds-mo" type="range" class="form-range" min="0" max="30" step="1" value="9">
+              </div>
+
+              <div class="mb-3">
+                <label for="fin-retainers-mo" class="form-label d-flex justify-content-between small fw-bold">
+                  <span>Monthly Office Support Clients</span>
+                  <span id="fin-retainers-val" class="num-php">5 offices (~45 PCs)</span>
+                </label>
+                <input id="fin-retainers-mo" type="range" class="form-range" min="0" max="25" step="1" value="5">
+              </div>
+
+              <div class="mb-3">
+                <label for="fin-margin-pct" class="form-label d-flex justify-content-between small fw-bold">
+                  <span>Profit Margin on Custom PCs (%)</span>
+                  <span id="fin-margin-val" class="num-php">17.0%</span>
+                </label>
+                <input id="fin-margin-pct" type="range" class="form-range" min="6" max="28" step="0.5" value="17">
+              </div>
+
+              <div class="mb-3">
+                <label for="fin-rma-pct" class="form-label d-flex justify-content-between small fw-bold">
+                  <span>Warranty &amp; Repair Reserve (%)</span>
+                  <span id="fin-rma-val" class="num-php">3.0%</span>
+                </label>
+                <input id="fin-rma-pct" type="range" class="form-range" min="0" max="8" step="0.5" value="3">
+              </div>
+
+              <div class="mb-3">
+                <label for="fin-tax-regime" class="form-label fw-bold small">Philippine BIR Tax Option</label>
+                <select id="fin-tax-regime" class="form-select">
+                  <option value="nonvat-8" selected>Non-VAT 8% Income Tax (Under ₱3M/yr sales)</option>
+                  <option value="nonvat-3">Non-VAT 3% Percentage Tax + Income Tax</option>
+                  <option value="vat-12">12% VAT Registered (₱3M+/yr sales)</option>
+                </select>
+                <div id="fin-tax-footnote" class="form-text small"></div>
+              </div>
+
+              <div id="fin-vat-alert" class="alert alert-danger rounded-0 small d-none" role="status"></div>
+              <div id="fin-staff-alert" class="alert alert-warning rounded-0 small d-none" role="status"></div>
+            </div>
+
+            <div class="col-lg-7">
+              <div class="ledger-panel-dark spec-sheet-accent p-4 h-100 d-flex flex-column justify-content-between" aria-live="polite">
+                <div>
+                  <div class="font-mono-data small pb-2 mb-3 border-bottom border-light border-opacity-25">
+                    Monthly profit summary
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>Monthly Gross Sales</span>
+                    <strong id="fin-gross-billings" class="num-php">₱640,000</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>Parts Cost Paid to Suppliers</span>
+                    <strong id="fin-hardware-cogs" class="num-php">₱466,875</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>Warranty Reserve</span>
+                    <strong id="fin-rma-reserve" class="num-php">₱16,875</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>Studio Earnings (Builds + Support)</span>
+                    <strong id="fin-gross-margin-total" class="num-php fs-5">₱136,875</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>Fixed Monthly Bills</span>
+                    <strong id="fin-opex-effective" class="num-php">₱122,500</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>Estimated BIR Tax</span>
+                    <strong id="fin-tax-estimated" class="num-php">₱49,533</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span class="fw-bold">Net Monthly Profit</span>
+                    <strong id="fin-net-profit" class="num-php fs-4" style="color: var(--esd-copper-light);">₱0</strong>
+                  </div>
+                </div>
+
+                <div class="pt-3 mt-3 border-top border-light border-opacity-25">
+                  <div class="ledger-divider-row py-1">
+                    <span>Break-Even Sales</span>
+                    <strong id="fin-breakeven-out" class="num-php text-end"></strong>
+                  </div>
+                  <div class="ledger-divider-row py-1">
+                    <span>Startup Payback Time</span>
+                    <strong id="fin-payback-out" class="num-php text-end"></strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="ledger-panel p-4">
+              <h2 class="h4 mt-0 mb-3">First-Year Cash Flow &amp; Payback</h2>
+              <p class="small text-secondary mb-3">Starts at -₱345,000 startup spending and assumes slower opening sales in Months 1–3 (60%, 80%, 92%).</p>
+              <div class="chart-frame mb-4">
+                <svg id="cashflow-svg" viewBox="0 0 680 250" width="680" height="250" class="w-100 h-auto" role="img" aria-label="12-month cash balance graph showing payback from -345,000 startup budget"></svg>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-esd table-striped align-middle small">
+                  <thead>
+                    <tr>
+                      <th scope="col">Month</th>
+                      <th scope="col" class="text-end">Total Sales</th>
+                      <th scope="col" class="text-end">Studio Earnings</th>
+                      <th scope="col" class="text-end">Bills + Tax</th>
+                      <th scope="col" class="text-end">Monthly Profit</th>
+                      <th scope="col" class="text-end">Running Cash Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cashflow-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="stepper-band py-3 no-print" aria-label="Section navigation">
+    <div class="container-xxl d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <a href="/operations" class="btn btn-ink-outline">Previous: Operations</a>
+      <a href="/contact" class="btn btn-teal d-inline-flex align-items-center gap-2">
+        <span>Next: Contact</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <footer class="esd-footer py-4">
+    <div class="container-xxl d-flex flex-wrap justify-content-between align-items-center gap-3 small">
+      <div><strong class="text-white">Nvidium</strong> · Unit 204, Esteban Abada Strip, Loyola Heights, Quezon City</div>
+      <div class="font-mono-data">Katipunan–Diliman Corridor · Quezon City</div>
+    </div>
+    <div class="container-xxl">
+      <div class="esd-vercel-watermark font-mono-data">Hosted on Vercel</div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
+  <script src="./js/app.js" defer></script>
+</body>
+</html>

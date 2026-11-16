@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 380" width="640" height="380" role="img" aria-label="Studio Render and AI Node schematic">
+  <rect width="640" height="380" fill="#0D3A40"/>
+  <g stroke="rgba(242,244,242,0.08)" stroke-width="1">
+    <path d="M0 40H640M0 80H640M0 120H640M0 160H640M0 200H640M0 240H640M0 280H640M0 320H640"/>
+    <path d="M40 0V380M80 0V380M120 0V380M160 0V380M200 0V380M240 0V380M280 0V380M320 0V380M360 0V380M400 0V380M440 0V380M480 0V380M520 0V380M560 0V380M600 0V380"/>
+  </g>
+  <rect x="24" y="24" width="592" height="332" fill="none" stroke="#9FC2C5" stroke-width="1.5"/>
+  <rect x="68" y="52" width="236" height="276" fill="#13484F" stroke="#F2F4F2" stroke-width="2"/>
+  <rect x="84" y="68" width="204" height="34" fill="#09292E" stroke="#C8501F" stroke-width="1.5"/>
+  <text x="96" y="89" fill="#FFB38A" font-family="monospace" font-size="11">360MM RADIATOR // TOP EXHAUST</text>
+  <rect x="100" y="122" width="84" height="64" fill="#165760" stroke="#F2F4F2" stroke-width="1.5"/>
+  <text x="112" y="158" fill="#FFFFFF" font-family="monospace" font-size="12">12C / 24T</text>
+  <rect x="200" y="120" width="12" height="68" fill="#FFB38A"/>
+  <rect x="218" y="120" width="12" height="68" fill="#FFB38A"/>
+  <rect x="236" y="120" width="12" height="68" fill="#FFB38A"/>
+  <rect x="254" y="120" width="12" height="68" fill="#FFB38A"/>
+  <rect x="92" y="204" width="190" height="44" fill="#C8501F"/>
+  <text x="104" y="231" fill="#FFFFFF" font-family="monospace" font-size="12" font-weight="bold">RTX 4070 Ti SUPER 16G</text>
+  <rect x="92" y="264" width="190" height="42" fill="#09292E" stroke="#9FC2C5" stroke-width="1.2"/>
+  <text x="104" y="289" fill="#D4E1E2" font-family="monospace" font-size="11">850W ATX 3.0 · 2.5GbE LAN</text>
+  <g font-family="monospace" fill="#F2F4F2">
+    <text x="330" y="92" font-size="12" fill="#FFB38A">TIER 03 // STUDIO &amp; AI LAB</text>
+    <text x="330" y="124" font-size="22" font-weight="bold">Studio Render Node</text>
+    <line x1="330" y1="142" x2="584" y2="142" stroke="#9FC2C5" stroke-width="1"/>
+    <text x="330" y="172" font-size="13" fill="#D4E1E2">CPU   Ryzen 9 7900X (12C/24T)</text>
+    <text x="330" y="198" font-size="13" fill="#D4E1E2">RAM   96GB DDR5 High-Density</text>
+    <text x="330" y="224" font-size="13" fill="#D4E1E2">DISK  4TB Dual NVMe Scratch</text>
+    <text x="330" y="250" font-size="13" fill="#D4E1E2">USE   DaVinci 4K · Local LLM</text>
+    <rect x="330" y="276" width="246" height="40" fill="#C8501F"/>
+    <text x="346" y="301" font-size="14" font-weight="bold" fill="#FFFFFF">70% PO DEPOSIT · PRIORITY QA</text>
+  </g>
+</svg>
