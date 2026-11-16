@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Client Account &amp; 2FA Vault — Nvidium</title>
+  <title>Sign In — Nvidium</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <link rel="stylesheet" href="./css/styles.css?v=8">
+  <link rel="stylesheet" href="./css/styles.css?v=9">
 </head>
 <body data-page="account">
   <header class="sticky-top">
@@ -34,7 +34,7 @@
             <li class="nav-item"><a class="nav-link" data-nav="contact" href="/contact"><span class="esd-nav-idx">08</span><span>Contact</span></a></li>
           </ul>
           <div class="esd-nav-actions d-flex align-items-center gap-2 mt-2 mt-xl-0">
-            <a id="nav-account-pill" class="account-pill-nav active" href="/account" aria-current="page"><span class="account-pill-dot" aria-hidden="true"></span><span>Account · 2FA</span></a>
+            <a id="nav-account-pill" class="account-pill-nav active" href="/account" aria-current="page"><span class="account-pill-dot" aria-hidden="true"></span><span>Account</span></a>
             <a id="nav-quote-pill" class="quote-pill-nav" href="/checkout">Quote: ₱62,500</a>
           </div>
         </div>
@@ -45,108 +45,84 @@
   <main>
     <div id="global-runtime-alert" class="alert alert-warning rounded-0 mb-0 d-none" role="alert"></div>
 
-    <section class="page-header-light">
-      <div class="container-xxl">
-        <h1>Client Account &amp; 2FA Vault</h1>
-        <p class="page-lead">
-          Salted PBKDF2-SHA256 authentication with mandatory RFC 6238 Authenticator 2FA to store custom builds and order records across devices.
-        </p>
-      </div>
-    </section>
+    <section class="py-5">
+      <div class="container py-lg-4" id="account-app">
+        <div id="account-auth-panel" class="ledger-panel account-auth-card mx-auto p-4 p-sm-4">
+          <h1 id="auth-heading" class="h4 mt-0 mb-1">Sign in to Nvidium</h1>
+          <p id="auth-sub" class="small text-secondary mb-4">View your saved builds and orders.</p>
 
-    <section class="py-4 py-lg-5">
-      <div class="container" id="account-app">
-        <div class="account-shell mx-auto">
-          <div id="account-auth-panel" class="ledger-panel p-4 mb-4">
-            <div class="btn-group w-100 mb-3" role="group" aria-label="Account Mode">
-              <button type="button" class="btn btn-ink-outline btn-sm w-50 is-active" data-auth-mode="login" aria-pressed="true">Sign In</button>
-              <button type="button" class="btn btn-ink-outline btn-sm w-50" data-auth-mode="signup" aria-pressed="false">Create Account</button>
+          <div id="auth-error-alert" class="alert alert-danger small py-2 d-none" role="alert"></div>
+
+          <form id="auth-credentials-form" novalidate>
+            <div id="auth-name-group" class="mb-3 d-none">
+              <label for="auth-full-name" class="form-label fw-semibold small mb-1">Full name</label>
+              <input id="auth-full-name" type="text" class="form-control" placeholder="Juan Dela Cruz" autocomplete="name">
+            </div>
+            <div class="mb-3">
+              <label for="auth-email" class="form-label fw-semibold small mb-1">Email</label>
+              <input id="auth-email" type="email" class="form-control" required placeholder="you@example.com" autocomplete="email">
+            </div>
+            <div class="mb-4">
+              <label for="auth-password" class="form-label fw-semibold small mb-1">Password</label>
+              <input id="auth-password" type="password" class="form-control" required minlength="8" placeholder="Password" autocomplete="current-password">
+            </div>
+            <button id="auth-credentials-submit" type="submit" class="btn btn-teal w-100">Continue</button>
+
+            <div class="text-center small text-secondary pt-3 mt-3 border-top border-dark border-opacity-10">
+              <span id="auth-switch-prompt">No account yet?</span>
+              <button id="auth-switch-btn" type="button" class="btn btn-link btn-sm p-0 ms-1 align-baseline fw-semibold text-decoration-none" data-auth-mode-switch="signup">Create one</button>
+            </div>
+          </form>
+
+          <form id="auth-totp-form" class="d-none" novalidate>
+            <div id="auth-enroll-box" class="d-none mb-3 text-center">
+              <p class="small text-secondary mb-3">Scan with Google Authenticator or Authy to finish setting up two-step verification.</p>
+              <div id="auth-qr-box" class="esd-qr-frame mb-2"></div>
+              <div>
+                <code id="auth-totp-secret" class="d-block small font-mono-data text-secondary mb-2" style="word-break: break-all;"></code>
+                <button id="auth-copy-secret-btn" type="button" class="btn btn-ink-outline btn-sm">Copy setup key</button>
+              </div>
             </div>
 
-            <div id="auth-error-alert" class="alert alert-danger small py-2 d-none" role="alert"></div>
+            <div id="auth-login-2fa-note" class="d-none mb-3">
+              <p class="small text-secondary mb-0">Enter the 6-digit code from your authenticator app.</p>
+            </div>
 
-            <form id="auth-credentials-form" novalidate>
-              <div id="auth-name-group" class="mb-3 d-none">
-                <label for="auth-full-name" class="form-label fw-semibold small mb-1">Full Legal Name</label>
-                <input id="auth-full-name" type="text" class="form-control" placeholder="Juan Dela Cruz" autocomplete="name">
-              </div>
-              <div class="mb-3">
-                <label for="auth-email" class="form-label fw-semibold small mb-1">Email Address</label>
-                <input id="auth-email" type="email" class="form-control" required placeholder="client@domain.ph" autocomplete="email">
-              </div>
-              <div class="mb-3">
-                <label for="auth-password" class="form-label fw-semibold small mb-1">Password</label>
-                <input id="auth-password" type="password" class="form-control" required minlength="8" placeholder="Minimum 8 characters" autocomplete="current-password">
-                <div class="form-text small">Hashed server-side with a unique 16-byte cryptographic salt and 120,000 PBKDF2-SHA256 iterations.</div>
-              </div>
-              <button id="auth-credentials-submit" type="submit" class="btn btn-copper w-100">Continue to 2FA Verification</button>
-            </form>
+            <div class="mb-3">
+              <label for="auth-totp-code" class="form-label fw-semibold small mb-1">Verification code</label>
+              <input id="auth-totp-code" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" class="form-control font-mono-data fs-5 text-center" required placeholder="123456" autocomplete="one-time-code">
+            </div>
 
-            <form id="auth-totp-form" class="d-none" novalidate>
-              <div id="auth-enroll-box" class="d-none mb-3 p-3 border border-dark bg-light">
-                <h2 class="h6 mt-0 mb-2">Step 2 · Pair Your Authenticator App</h2>
-                <p class="small text-secondary mb-3">Scan this locally generated QR code in Google Authenticator, Authy, or 1Password, or enter the Base32 key manually.</p>
-                <div class="d-flex flex-wrap align-items-center gap-3">
-                  <div id="auth-qr-box" class="esd-qr-frame"></div>
-                  <div class="flex-grow-1">
-                    <div class="font-mono-data small text-secondary mb-1">Manual Setup Key</div>
-                    <code id="auth-totp-secret" class="d-block p-2 border border-dark bg-white small font-mono-data mb-2" style="word-break: break-all;"></code>
-                    <button id="auth-copy-secret-btn" type="button" class="btn btn-ink-outline btn-sm">Copy Key</button>
-                  </div>
-                </div>
-              </div>
+            <button id="auth-totp-submit" type="submit" class="btn btn-teal w-100 mb-2">Verify</button>
+            <div class="text-center">
+              <button id="auth-totp-back" type="button" class="btn btn-link btn-sm text-secondary text-decoration-none">Back to sign in</button>
+            </div>
+          </form>
+        </div>
 
-              <div id="auth-login-2fa-note" class="d-none mb-3">
-                <h2 class="h6 mt-0 mb-1">Step 2 · Enter 6-Digit Authenticator Code</h2>
-                <p class="small text-secondary mb-0">Password verified against your salted SHA-256 hash. Enter the active TOTP code from your authenticator app.</p>
-              </div>
-
-              <div class="mb-3">
-                <label for="auth-totp-code" class="form-label fw-semibold small mb-1">6-Digit 2FA Code</label>
-                <input id="auth-totp-code" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" class="form-control font-mono-data fs-5 text-center" required placeholder="000000" autocomplete="one-time-code">
-              </div>
-
-              <div class="d-flex gap-2">
-                <button id="auth-totp-back" type="button" class="btn btn-ink-outline">Back</button>
-                <button id="auth-totp-submit" type="submit" class="btn btn-teal flex-grow-1">Verify Code &amp; Sign In</button>
-              </div>
-            </form>
+        <div id="account-vault-panel" class="account-vault-shell mx-auto d-none">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 pb-3 mb-4 border-bottom border-dark">
+            <div>
+              <h1 id="vault-user-name" class="h3 my-0">Account</h1>
+              <p id="vault-user-email" class="small text-secondary mb-0"></p>
+            </div>
+            <div class="d-flex gap-2">
+              <a href="/services" class="btn btn-teal btn-sm">Configure Build</a>
+              <button id="vault-logout-btn" type="button" class="btn btn-ink-outline btn-sm">Sign out</button>
+            </div>
           </div>
 
-          <div id="account-vault-panel" class="d-none">
-            <div class="ledger-panel-dark p-4 mb-4">
-              <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-                <div>
-                  <span class="font-mono-data small d-block mb-1" style="color: var(--esd-copper-light);">Salted PBKDF2-SHA256 · TOTP 2FA Verified</span>
-                  <h2 id="vault-user-name" class="h4 my-0 text-white">Client Account</h2>
-                  <p id="vault-user-email" class="small font-mono-data mb-0" style="color: var(--esd-teal-tint);"></p>
-                </div>
-                <div class="d-flex gap-2">
-                  <a href="/services" class="btn btn-copper btn-sm">Configure Build</a>
-                  <button id="vault-logout-btn" type="button" class="btn btn-esd-outline btn-sm">Sign Out</button>
-                </div>
-              </div>
+          <div class="ledger-panel p-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 mb-3 border-bottom border-dark">
+              <h2 class="h5 my-0">Saved builds &amp; orders</h2>
+              <button id="vault-refresh-btn" type="button" class="btn btn-ink-outline btn-sm">Refresh</button>
             </div>
-
-            <div class="ledger-panel p-4">
-              <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 mb-3 border-bottom border-dark">
-                <h2 class="h4 my-0">Saved Builds &amp; Confirmed Orders</h2>
-                <button id="vault-refresh-btn" type="button" class="btn btn-ink-outline btn-sm">Refresh</button>
-              </div>
-              <div id="vault-purchases-list" class="d-grid gap-3"></div>
-            </div>
+            <div id="vault-purchases-list" class="d-grid gap-3"></div>
           </div>
         </div>
       </div>
     </section>
   </main>
-
-  <section class="stepper-band py-3 no-print" aria-label="Section navigation">
-    <div class="container-xxl d-flex justify-content-between align-items-center flex-wrap gap-2">
-      <a href="/services" class="btn btn-ink-outline">PC Configurator</a>
-      <a href="/checkout" class="btn btn-teal">Go to Checkout</a>
-    </div>
-  </section>
 
   <footer class="esd-footer py-4">
     <div class="container-xxl d-flex flex-wrap justify-content-between align-items-center gap-3 small">
@@ -159,6 +135,6 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
-  <script src="./js/app.js?v=11" defer></script>
+  <script src="./js/app.js?v=12" defer></script>
 </body>
 </html>

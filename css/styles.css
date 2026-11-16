@@ -1421,15 +1421,19 @@ details.esd-details[open]::details-content {
 
 .esd-tier-photo {
   width: calc(100% + 2.3rem);
+  height: 176px;
   margin: -1.1rem -1.15rem 0.85rem;
-  aspect-ratio: 16 / 9;
   object-fit: cover;
   display: block;
   border-bottom: 1px solid var(--esd-rule-soft);
 }
 
-.account-shell {
-  max-width: 680px;
+.account-auth-card {
+  max-width: 400px;
+}
+
+.account-vault-shell {
+  max-width: 720px;
 }
 
 .esd-qr-frame {

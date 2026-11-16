@@ -3472,12 +3472,12 @@
         pill.classList.add('is-signed-in');
         var shortName = String(user.fullName || user.email || 'Account').split(' ')[0];
         if (labelSpan) {
-          labelSpan.textContent = shortName + ' · 2FA';
+          labelSpan.textContent = shortName;
         }
       } else {
         pill.classList.remove('is-signed-in');
         if (labelSpan) {
-          labelSpan.textContent = 'Account · 2FA';
+          labelSpan.textContent = 'Account';
         }
       }
     }
@@ -3488,9 +3488,9 @@
     var chkEmail = document.getElementById('chk-email');
     if (chkStatus) {
       if (user) {
-        chkStatus.textContent = 'Signed in as ' + user.fullName + ' (' + user.email + ') — Confirmed orders save to your vault.';
+        chkStatus.textContent = 'Signed in as ' + user.fullName + ' (' + user.email + ') — Orders save to your account.';
         if (chkLink) {
-          chkLink.textContent = 'View Vault';
+          chkLink.textContent = 'Account';
         }
         if (chkName && !chkName.value.trim()) {
           chkName.value = user.fullName || '';
@@ -3499,9 +3499,9 @@
           chkEmail.value = user.email || '';
         }
       } else {
-        chkStatus.textContent = 'Sign in with 2FA to save confirmed orders under your account.';
+        chkStatus.textContent = 'Sign in to save confirmed orders to your account.';
         if (chkLink) {
-          chkLink.textContent = 'Sign In / Account';
+          chkLink.textContent = 'Sign in';
         }
       }
     }
@@ -3515,7 +3515,10 @@
 
     var authPanel = document.getElementById('account-auth-panel');
     var vaultPanel = document.getElementById('account-vault-panel');
-    var modeButtons = root.querySelectorAll('[data-auth-mode]');
+    var authHeading = document.getElementById('auth-heading');
+    var authSub = document.getElementById('auth-sub');
+    var switchPrompt = document.getElementById('auth-switch-prompt');
+    var switchBtn = document.getElementById('auth-switch-btn');
     var credForm = document.getElementById('auth-credentials-form');
     var totpForm = document.getElementById('auth-totp-form');
     var nameGroup = document.getElementById('auth-name-group');
@@ -3552,11 +3555,19 @@
     function setAuthMode(mode) {
       authMode = mode === 'signup' ? 'signup' : 'login';
       showAuthError('');
-      modeButtons.forEach(function (btn) {
-        var active = btn.getAttribute('data-auth-mode') === authMode;
-        btn.classList.toggle('is-active', active);
-        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-      });
+      if (authHeading) {
+        authHeading.textContent = authMode === 'signup' ? 'Create your account' : 'Sign in to Nvidium';
+      }
+      if (authSub) {
+        authSub.textContent = authMode === 'signup' ? 'Save builds and track orders across devices.' : 'View your saved builds and orders.';
+      }
+      if (switchPrompt) {
+        switchPrompt.textContent = authMode === 'signup' ? 'Already have an account?' : 'No account yet?';
+      }
+      if (switchBtn) {
+        switchBtn.textContent = authMode === 'signup' ? 'Sign in' : 'Create one';
+        switchBtn.setAttribute('data-auth-mode-switch', authMode === 'signup' ? 'login' : 'signup');
+      }
       if (nameGroup) {
         nameGroup.classList.toggle('d-none', authMode !== 'signup');
       }
@@ -3565,9 +3576,10 @@
       }
       if (passwordInput) {
         passwordInput.setAttribute('autocomplete', authMode === 'signup' ? 'new-password' : 'current-password');
+        passwordInput.setAttribute('placeholder', authMode === 'signup' ? 'At least 8 characters' : 'Password');
       }
       if (credSubmitBtn) {
-        credSubmitBtn.textContent = authMode === 'signup' ? 'Create Account & Setup 2FA' : 'Continue to 2FA Verification';
+        credSubmitBtn.textContent = authMode === 'signup' ? 'Create account' : 'Continue';
       }
       if (credForm) credForm.classList.remove('d-none');
       if (totpForm) totpForm.classList.add('d-none');
@@ -3677,11 +3689,11 @@
       setAuthMode('login');
     }
 
-    modeButtons.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        setAuthMode(btn.getAttribute('data-auth-mode'));
+    if (switchBtn) {
+      switchBtn.addEventListener('click', function () {
+        setAuthMode(switchBtn.getAttribute('data-auth-mode-switch'));
       });
-    });
+    }
 
     if (credForm) {
       credForm.addEventListener('submit', function (event) {
@@ -3712,6 +3724,8 @@
             pendingChallenge = res.data.challengeToken;
             credForm.classList.add('d-none');
             totpForm.classList.remove('d-none');
+            if (authHeading) authHeading.textContent = 'Two-factor authentication';
+            if (authSub) authSub.textContent = '';
             if (res.data.isEnrollment) {
               if (enrollBox) enrollBox.classList.remove('d-none');
               if (loginNote) loginNote.classList.add('d-none');
