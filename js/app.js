@@ -1236,6 +1236,162 @@
     }
 
     updateGlobalTelemetryUI(ProposalStore.get());
+    initNavRail();
+  }
+
+  function initNavRail() {
+    if (typeof document.querySelector !== 'function') {
+      return;
+    }
+    var rail = document.querySelector('.esd-cal-rail');
+    var header = document.querySelector('header.sticky-top');
+    var navbar = header ? header.querySelector('.esd-navbar') : null;
+    if (!rail || !header || !navbar || rail.getAttribute('data-rail-ready') === '1') {
+      return;
+    }
+    rail.setAttribute('data-rail-ready', '1');
+
+    var COMPACT_AT = 96;
+    var EXPAND_AT = 48;
+    var desktopQuery = globalScope.matchMedia ? globalScope.matchMedia('(min-width: 1200px)') : null;
+
+    var curActive = rail.querySelector('.nav-link.active');
+    var anchorItem = curActive ? curActive.closest('.nav-item') : rail.querySelector('.nav-item');
+    if (anchorItem) {
+      anchorItem.classList.add('is-rail-anchor');
+    }
+
+    var toggleLi = document.createElement('li');
+    toggleLi.className = 'nav-item esd-rail-toggle-item';
+    var toggleBtn = document.createElement('button');
+    toggleBtn.type = 'button';
+    toggleBtn.id = 'esd-rail-toggle';
+    toggleBtn.className = 'esd-rail-toggle';
+    toggleBtn.setAttribute('aria-expanded', 'true');
+    toggleBtn.setAttribute('aria-label', 'Collapse navigation bar');
+    toggleBtn.setAttribute('title', 'Collapse navigation bar');
+    toggleBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3.5L5.5 8L10 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    toggleLi.appendChild(toggleBtn);
+    rail.appendChild(toggleLi);
+
+    var indicator = document.createElement('span');
+    indicator.className = 'esd-nav-indicator';
+    indicator.setAttribute('aria-hidden', 'true');
+    rail.appendChild(indicator);
+
+    function isDesktop() {
+      return !desktopQuery || desktopQuery.matches;
+    }
+
+    function activeLink() {
+      return rail.querySelector('.nav-link.active');
+    }
+
+    function moveIndicatorTo(link, ghost) {
+      if (!link || !isDesktop()) {
+        indicator.classList.remove('is-ready');
+        indicator.style.opacity = '0';
+        return;
+      }
+      var railRect = rail.getBoundingClientRect();
+      var rect = link.getBoundingClientRect();
+      if (rect.width <= 0 || railRect.width <= 0) {
+        indicator.classList.remove('is-ready');
+        indicator.style.opacity = '0';
+        return;
+      }
+      indicator.style.opacity = '';
+      var x = rect.left - railRect.left;
+      var w = Math.max(24, rect.width);
+      indicator.style.width = w.toFixed(2) + 'px';
+      indicator.style.transform = 'translate3d(' + x.toFixed(2) + 'px, 0, 0)';
+      indicator.classList.toggle('is-ghost', Boolean(ghost));
+    }
+
+    function settle() {
+      moveIndicatorTo(activeLink(), false);
+    }
+
+    function setRailCollapsed(collapsed) {
+      var nextState = Boolean(collapsed);
+      rail.classList.toggle('is-rail-collapsed', nextState);
+      toggleBtn.setAttribute('aria-expanded', nextState ? 'false' : 'true');
+      var label = nextState ? 'Expand navigation bar' : 'Collapse navigation bar';
+      toggleBtn.setAttribute('aria-label', label);
+      toggleBtn.setAttribute('title', label);
+      indicator.classList.remove('is-ready');
+      settle();
+      void indicator.offsetWidth;
+      if (activeLink() && isDesktop()) {
+        indicator.classList.add('is-ready');
+      }
+    }
+
+    toggleBtn.addEventListener('click', function () {
+      setRailCollapsed(!rail.classList.contains('is-rail-collapsed'));
+    });
+
+    function measureHeader() {
+      if (!isDesktop()) {
+        header.style.removeProperty('--esd-nav-h');
+        return;
+      }
+      var wasCompact = header.classList.contains('is-compact');
+      header.classList.remove('is-compact');
+      header.style.setProperty('--esd-nav-h', navbar.offsetHeight + 'px');
+      if (wasCompact) {
+        header.classList.add('is-compact');
+      }
+    }
+
+    rail.querySelectorAll('.nav-link').forEach(function (link) {
+      link.addEventListener('mouseenter', function () {
+        moveIndicatorTo(link, !link.classList.contains('active'));
+      });
+      link.addEventListener('focus', function () {
+        moveIndicatorTo(link, !link.classList.contains('active'));
+      });
+      link.addEventListener('blur', settle);
+    });
+    rail.addEventListener('mouseleave', settle);
+
+    var compact = false;
+    var ticking = false;
+    function onScroll() {
+      ticking = false;
+      var y = globalScope.scrollY || globalScope.pageYOffset || 0;
+      var next = compact ? y > EXPAND_AT : y > COMPACT_AT;
+      if (!isDesktop()) {
+        next = false;
+      }
+      if (next !== compact) {
+        compact = next;
+        header.classList.toggle('is-compact', compact);
+        settle();
+      }
+    }
+    globalScope.addEventListener('scroll', function () {
+      if (!ticking) {
+        ticking = true;
+        globalScope.requestAnimationFrame(onScroll);
+      }
+    }, { passive: true });
+
+    function onLayoutChange() {
+      measureHeader();
+      onScroll();
+      indicator.classList.remove('is-ready');
+      settle();
+      void indicator.offsetWidth;
+      if (activeLink() && isDesktop()) {
+        indicator.classList.add('is-ready');
+      }
+    }
+    globalScope.addEventListener('resize', onLayoutChange);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(onLayoutChange);
+    }
+    onLayoutChange();
   }
 
   function appendReceiptRow(container, labelText, valueText, labelColor) {
@@ -3520,19 +3676,21 @@
     var switchPrompt = document.getElementById('auth-switch-prompt');
     var switchBtn = document.getElementById('auth-switch-btn');
     var credForm = document.getElementById('auth-credentials-form');
-    var totpForm = document.getElementById('auth-totp-form');
+    var otpForm = document.getElementById('auth-otp-form');
     var nameGroup = document.getElementById('auth-name-group');
     var fullNameInput = document.getElementById('auth-full-name');
     var emailInput = document.getElementById('auth-email');
     var passwordInput = document.getElementById('auth-password');
     var credSubmitBtn = document.getElementById('auth-credentials-submit');
-    var enrollBox = document.getElementById('auth-enroll-box');
-    var loginNote = document.getElementById('auth-login-2fa-note');
-    var qrBox = document.getElementById('auth-qr-box');
-    var secretEl = document.getElementById('auth-totp-secret');
-    var copySecretBtn = document.getElementById('auth-copy-secret-btn');
-    var totpCodeInput = document.getElementById('auth-totp-code');
-    var totpBackBtn = document.getElementById('auth-totp-back');
+    var otpGroup = document.getElementById('auth-otp-boxes');
+    var otpBoxes = otpGroup ? Array.prototype.slice.call(otpGroup.querySelectorAll('.esd-otp-box')) : [];
+    var otpSubmitBtn = document.getElementById('auth-otp-submit');
+    var otpEmailEl = document.getElementById('auth-otp-email');
+    var otpResendBtn = document.getElementById('auth-otp-resend');
+    var otpTimerEl = document.getElementById('auth-otp-timer');
+    var otpBackBtn = document.getElementById('auth-otp-back');
+    var successBox = document.getElementById('auth-success');
+    var successText = document.getElementById('auth-success-text');
     var errorAlert = document.getElementById('auth-error-alert');
     var logoutBtn = document.getElementById('vault-logout-btn');
     var refreshBtn = document.getElementById('vault-refresh-btn');
@@ -3540,6 +3698,9 @@
 
     var authMode = 'login';
     var pendingChallenge = '';
+    var resendTimer = null;
+    var verifying = false;
+    var SUCCESS_HOLD_MS = 1900;
 
     function showAuthError(msg) {
       if (!errorAlert) return;
@@ -3552,8 +3713,47 @@
       }
     }
 
+    function postAuth(payload) {
+      return globalScope.fetch('/api/auth', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (d) {
+          return { ok: r.ok, status: r.status, data: d };
+        });
+      });
+    }
+
+    function stopResendTimer() {
+      if (resendTimer) {
+        clearInterval(resendTimer);
+        resendTimer = null;
+      }
+    }
+
+    function startResendTimer(seconds) {
+      stopResendTimer();
+      var left = Math.max(0, Number(seconds) || 0);
+      function tick() {
+        if (otpResendBtn) otpResendBtn.disabled = left > 0;
+        if (otpTimerEl) otpTimerEl.textContent = left > 0 ? '0:' + String(left).padStart(2, '0') : '';
+        if (left <= 0) {
+          stopResendTimer();
+        }
+        left -= 1;
+      }
+      tick();
+      if (left >= 0) {
+        resendTimer = setInterval(tick, 1000);
+      }
+    }
+
     function setAuthMode(mode) {
       authMode = mode === 'signup' ? 'signup' : 'login';
+      pendingChallenge = '';
+      stopResendTimer();
       showAuthError('');
       if (authHeading) {
         authHeading.textContent = authMode === 'signup' ? 'Create your account' : 'Sign in to Nvidium';
@@ -3582,8 +3782,170 @@
         credSubmitBtn.textContent = authMode === 'signup' ? 'Create account' : 'Continue';
       }
       if (credForm) credForm.classList.remove('d-none');
-      if (totpForm) totpForm.classList.add('d-none');
+      if (otpForm) otpForm.classList.add('d-none');
+      if (successBox) successBox.classList.add('d-none');
     }
+
+    function otpValue() {
+      return otpBoxes.map(function (b) { return b.value; }).join('');
+    }
+
+    function setOtpState(state) {
+      if (!otpGroup) return;
+      otpGroup.classList.toggle('is-invalid', state === 'invalid');
+      otpGroup.classList.toggle('is-busy', state === 'busy');
+      otpBoxes.forEach(function (b) {
+        b.setAttribute('aria-invalid', state === 'invalid' ? 'true' : 'false');
+        b.readOnly = state === 'busy';
+      });
+    }
+
+    function clearOtp() {
+      otpBoxes.forEach(function (b) {
+        b.value = '';
+        b.classList.remove('is-filled');
+      });
+      if (otpBoxes[0]) otpBoxes[0].focus();
+    }
+
+    function fillOtpFrom(startIndex, digits) {
+      var i = startIndex;
+      for (var k = 0; k < digits.length && i < otpBoxes.length; k += 1, i += 1) {
+        otpBoxes[i].value = digits.charAt(k);
+        otpBoxes[i].classList.add('is-filled');
+      }
+      var next = Math.min(i, otpBoxes.length - 1);
+      otpBoxes[next].focus();
+      if (otpValue().length === otpBoxes.length) {
+        submitOtp();
+      }
+    }
+
+    function showOtpStep(data) {
+      pendingChallenge = data.challengeToken;
+      if (credForm) credForm.classList.add('d-none');
+      if (otpForm) otpForm.classList.remove('d-none');
+      if (authHeading) authHeading.textContent = 'Check your email';
+      if (authSub) authSub.textContent = '';
+      if (otpEmailEl) otpEmailEl.textContent = data.maskedEmail || '';
+      setOtpState('');
+      clearOtp();
+      startResendTimer(data.resendAfterSeconds || 30);
+    }
+
+    function playAuthSuccess(user) {
+      if (otpForm) otpForm.classList.add('d-none');
+      if (errorAlert) errorAlert.classList.add('d-none');
+      if (authHeading) authHeading.textContent = '';
+      if (authSub) authSub.textContent = '';
+      if (successText) {
+        successText.textContent = authMode === 'signup' ? 'Account created' : 'Signed in';
+      }
+      if (successBox) successBox.classList.remove('d-none');
+      var player = document.getElementById('auth-dotlottie-player');
+      var reduced = Boolean(globalScope.matchMedia && globalScope.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      function play(dl) {
+        if (!dl) return;
+        if (typeof dl.resize === 'function') dl.resize();
+        if (typeof dl.stop === 'function') dl.stop();
+        if (reduced) {
+          if (typeof dl.setFrame === 'function') dl.setFrame(Math.max(0, (dl.totalFrames || 120) - 1));
+        } else if (typeof dl.play === 'function') {
+          dl.play();
+        }
+      }
+      if (player && player.dotLottie) {
+        if (player.dotLottie.isLoaded) {
+          play(player.dotLottie);
+        } else if (typeof player.dotLottie.addEventListener === 'function') {
+          player.dotLottie.addEventListener('load', function () { play(player.dotLottie); });
+        }
+      }
+      setTimeout(function () {
+        if (successBox) successBox.classList.add('d-none');
+        enterVault(user);
+      }, reduced ? 900 : SUCCESS_HOLD_MS);
+    }
+
+    function submitOtp() {
+      if (verifying) return;
+      var code = otpValue();
+      if (!/^\d{6}$/.test(code)) {
+        showAuthError('Enter all 6 digits.');
+        setOtpState('invalid');
+        return;
+      }
+      verifying = true;
+      showAuthError('');
+      setOtpState('busy');
+      if (otpSubmitBtn) {
+        otpSubmitBtn.disabled = true;
+        otpSubmitBtn.textContent = 'Verifying…';
+      }
+      postAuth({ action: 'verify_code', challengeToken: pendingChallenge, code: code })
+        .then(function (res) {
+          verifying = false;
+          if (otpSubmitBtn) {
+            otpSubmitBtn.disabled = false;
+            otpSubmitBtn.textContent = 'Verify';
+          }
+          if (!res.ok || !res.data.authenticated) {
+            setOtpState('invalid');
+            showAuthError((res.data && res.data.error) || 'That code is incorrect.');
+            clearOtp();
+            return;
+          }
+          setOtpState('');
+          playAuthSuccess(res.data.user);
+        })
+        .catch(function () {
+          verifying = false;
+          setOtpState('');
+          if (otpSubmitBtn) {
+            otpSubmitBtn.disabled = false;
+            otpSubmitBtn.textContent = 'Verify';
+          }
+          showAuthError('Network error. Check your connection and try again.');
+        });
+    }
+
+    otpBoxes.forEach(function (box, index) {
+      box.addEventListener('input', function () {
+        var digits = box.value.replace(/\D/g, '');
+        if (otpGroup) otpGroup.classList.remove('is-invalid');
+        if (!digits) {
+          box.value = '';
+          box.classList.remove('is-filled');
+          return;
+        }
+        box.value = '';
+        fillOtpFrom(index, digits);
+      });
+      box.addEventListener('keydown', function (event) {
+        if (event.key === 'Backspace' && !box.value && index > 0) {
+          event.preventDefault();
+          otpBoxes[index - 1].value = '';
+          otpBoxes[index - 1].classList.remove('is-filled');
+          otpBoxes[index - 1].focus();
+        } else if (event.key === 'ArrowLeft' && index > 0) {
+          event.preventDefault();
+          otpBoxes[index - 1].focus();
+        } else if (event.key === 'ArrowRight' && index < otpBoxes.length - 1) {
+          event.preventDefault();
+          otpBoxes[index + 1].focus();
+        }
+      });
+      box.addEventListener('focus', function () {
+        box.select();
+      });
+      box.addEventListener('paste', function (event) {
+        var text = (event.clipboardData || globalScope.clipboardData).getData('text') || '';
+        var digits = text.replace(/\D/g, '').slice(0, otpBoxes.length);
+        if (!digits) return;
+        event.preventDefault();
+        fillOtpFrom(digits.length === otpBoxes.length ? 0 : index, digits);
+      });
+    });
 
     function escapeHtmlText(str) {
       return String(str || '')
@@ -3707,89 +4069,68 @@
         if (authMode === 'signup') {
           payload.fullName = fullNameInput ? fullNameInput.value.trim() : '';
         }
-        if (credSubmitBtn) credSubmitBtn.disabled = true;
-        globalScope.fetch('/api/auth', {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        })
-          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+        var idleLabel = credSubmitBtn ? credSubmitBtn.textContent : '';
+        if (credSubmitBtn) {
+          credSubmitBtn.disabled = true;
+          credSubmitBtn.textContent = 'Sending code…';
+        }
+        postAuth(payload)
           .then(function (res) {
-            if (credSubmitBtn) credSubmitBtn.disabled = false;
+            if (credSubmitBtn) {
+              credSubmitBtn.disabled = false;
+              credSubmitBtn.textContent = idleLabel;
+            }
             if (!res.ok || !res.data.challengeToken) {
-              showAuthError((res.data && res.data.error) || 'Authentication failed.');
+              showAuthError((res.data && res.data.error) || 'Something went wrong. Try again.');
+              return;
+            }
+            showOtpStep(res.data);
+          })
+          .catch(function () {
+            if (credSubmitBtn) {
+              credSubmitBtn.disabled = false;
+              credSubmitBtn.textContent = idleLabel;
+            }
+            showAuthError('Network error. Check your connection and try again.');
+          });
+      });
+    }
+
+    if (otpResendBtn) {
+      otpResendBtn.addEventListener('click', function () {
+        if (!pendingChallenge) return;
+        showAuthError('');
+        otpResendBtn.disabled = true;
+        postAuth({ action: 'resend_code', challengeToken: pendingChallenge })
+          .then(function (res) {
+            if (!res.ok || !res.data.challengeToken) {
+              showAuthError((res.data && res.data.error) || 'Could not resend the code.');
+              startResendTimer((res.data && res.data.resendAfterSeconds) || 0);
               return;
             }
             pendingChallenge = res.data.challengeToken;
-            credForm.classList.add('d-none');
-            totpForm.classList.remove('d-none');
-            if (authHeading) authHeading.textContent = 'Two-factor authentication';
-            if (authSub) authSub.textContent = '';
-            if (res.data.isEnrollment) {
-              if (enrollBox) enrollBox.classList.remove('d-none');
-              if (loginNote) loginNote.classList.add('d-none');
-              if (qrBox) qrBox.innerHTML = res.data.qrSvg || '';
-              if (secretEl) secretEl.textContent = res.data.totpSecret || '';
-            } else {
-              if (enrollBox) enrollBox.classList.add('d-none');
-              if (loginNote) loginNote.classList.remove('d-none');
-            }
-            if (totpCodeInput) {
-              totpCodeInput.value = '';
-              totpCodeInput.focus();
-            }
+            setOtpState('');
+            clearOtp();
+            startResendTimer(res.data.resendAfterSeconds || 30);
           })
           .catch(function () {
-            if (credSubmitBtn) credSubmitBtn.disabled = false;
-            showAuthError('Network error contacting authentication service.');
+            otpResendBtn.disabled = false;
+            showAuthError('Network error. Check your connection and try again.');
           });
       });
     }
 
-    if (copySecretBtn && secretEl) {
-      copySecretBtn.addEventListener('click', function () {
-        if (globalScope.navigator && globalScope.navigator.clipboard) {
-          globalScope.navigator.clipboard.writeText(secretEl.textContent || '');
-          copySecretBtn.textContent = 'Copied';
-          setTimeout(function () { copySecretBtn.textContent = 'Copy Key'; }, 1500);
-        }
-      });
-    }
-
-    if (totpBackBtn) {
-      totpBackBtn.addEventListener('click', function () {
-        pendingChallenge = '';
+    if (otpBackBtn) {
+      otpBackBtn.addEventListener('click', function () {
         setAuthMode(authMode);
+        if (emailInput) emailInput.focus();
       });
     }
 
-    if (totpForm) {
-      totpForm.addEventListener('submit', function (event) {
+    if (otpForm) {
+      otpForm.addEventListener('submit', function (event) {
         event.preventDefault();
-        showAuthError('');
-        var codeVal = totpCodeInput ? totpCodeInput.value.trim() : '';
-        globalScope.fetch('/api/auth', {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'verify_2fa',
-            challengeToken: pendingChallenge,
-            code: codeVal
-          })
-        })
-          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
-          .then(function (res) {
-            if (!res.ok || !res.data.authenticated) {
-              showAuthError((res.data && res.data.error) || 'Invalid 2FA code.');
-              return;
-            }
-            enterVault(res.data.user);
-          })
-          .catch(function () {
-            showAuthError('Network error verifying 2FA code.');
-          });
+        submitOtp();
       });
     }
 
