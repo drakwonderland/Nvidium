@@ -23,17 +23,20 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
         </button>
         <div class="collapse navbar-collapse" id="mainNav">
-          <ul class="navbar-nav me-auto mb-2 mb-xl-0 ms-xl-3 gap-xl-1">
-            <li class="nav-item"><a class="nav-link" data-nav="index" href="/">Home</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="about" href="/about">About</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="services" href="/services">Services</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="market" href="/market">Market</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="marketing" href="/marketing">Marketing</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="operations" href="/operations">Operations</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="financials" href="/financials">Financials</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="contact" href="/contact">Contact</a></li>
+          <ul class="navbar-nav esd-cal-rail mx-xl-auto mb-2 mb-xl-0">
+            <li class="nav-item"><a class="nav-link" data-nav="index" href="/"><span class="esd-nav-idx">01</span><span>Home</span></a></li>
+            <li class="nav-item"><a class="nav-link active" data-nav="about" href="/about" aria-current="page"><span class="esd-nav-idx">02</span><span>About</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="services" href="/services"><span class="esd-nav-idx">03</span><span>Services</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="market" href="/market"><span class="esd-nav-idx">04</span><span>Market</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="marketing" href="/marketing"><span class="esd-nav-idx">05</span><span>Marketing</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="operations" href="/operations"><span class="esd-nav-idx">06</span><span>Operations</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="financials" href="/financials"><span class="esd-nav-idx">07</span><span>Financials</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="contact" href="/contact"><span class="esd-nav-idx">08</span><span>Contact</span></a></li>
           </ul>
-          <a id="nav-quote-pill" class="quote-pill-nav d-inline-block mt-2 mt-xl-0" href="/contact">Quote: ₱62,500 + ₱12,000/mo</a>
+          <div class="esd-nav-actions d-flex align-items-center gap-2 mt-2 mt-xl-0">
+            <a id="nav-account-pill" class="account-pill-nav" href="/account"><span class="account-pill-dot" aria-hidden="true"></span><span>Account · 2FA</span></a>
+            <a id="nav-quote-pill" class="quote-pill-nav" href="/contact">Quote: ₱62,500 + ₱12,000/mo</a>
+          </div>
         </div>
       </div>
     </nav>
@@ -59,9 +62,16 @@
             <p class="prose-measure">
               Nvidium started inside a shared Loyola Heights apartment after architecture and engineering students kept losing thesis renders to overheated mall desktops and undersized power supplies. Word spread from UP Diliman to nearby 5-to-25 person studios and clinics facing ₱45,000/month corporate IT minimums.
             </p>
-            <p class="prose-measure mb-0">
+            <p class="prose-measure mb-3">
               Named for the graphics and compute silicon behind modern CAD and 3D work, Nvidium now runs a 28 sqm static-safe workshop on Esteban Abada—ordering fresh distributor parts on a 70% down payment, soak-testing every rig for 24 hours, and delivering 4-hour local office care.
             </p>
+            <figure class="esd-photo-card mb-0" style="height: auto;">
+              <img src="./assets/img/photo-assembly.jpg" width="1000" height="667" class="esd-photo-media" alt="Builder seating an RTX GPU into a workstation motherboard on the assembly bench">
+              <figcaption class="esd-photo-meta small text-secondary d-flex justify-content-between gap-2">
+                <span>GPU installation &amp; bench verification before 24-hr soak test.</span>
+                <span class="font-mono-data">Photo: JESHOOTS.COM</span>
+              </figcaption>
+            </figure>
           </div>
 
           <div class="col-lg-5 d-grid gap-4">

@@ -23,17 +23,20 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
         </button>
         <div class="collapse navbar-collapse" id="mainNav">
-          <ul class="navbar-nav me-auto mb-2 mb-xl-0 ms-xl-3 gap-xl-1">
-            <li class="nav-item"><a class="nav-link" data-nav="index" href="/">Home</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="about" href="/about">About</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="services" href="/services">Services</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="market" href="/market">Market</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="marketing" href="/marketing">Marketing</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="operations" href="/operations">Operations</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="financials" href="/financials">Financials</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="contact" href="/contact">Contact</a></li>
+          <ul class="navbar-nav esd-cal-rail mx-xl-auto mb-2 mb-xl-0">
+            <li class="nav-item"><a class="nav-link" data-nav="index" href="/"><span class="esd-nav-idx">01</span><span>Home</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="about" href="/about"><span class="esd-nav-idx">02</span><span>About</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="services" href="/services"><span class="esd-nav-idx">03</span><span>Services</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="market" href="/market"><span class="esd-nav-idx">04</span><span>Market</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="marketing" href="/marketing"><span class="esd-nav-idx">05</span><span>Marketing</span></a></li>
+            <li class="nav-item"><a class="nav-link active" data-nav="operations" href="/operations" aria-current="page"><span class="esd-nav-idx">06</span><span>Operations</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="financials" href="/financials"><span class="esd-nav-idx">07</span><span>Financials</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="contact" href="/contact"><span class="esd-nav-idx">08</span><span>Contact</span></a></li>
           </ul>
-          <a id="nav-quote-pill" class="quote-pill-nav d-inline-block mt-2 mt-xl-0" href="/contact">Quote: ₱62,500 + ₱12,000/mo</a>
+          <div class="esd-nav-actions d-flex align-items-center gap-2 mt-2 mt-xl-0">
+            <a id="nav-account-pill" class="account-pill-nav" href="/account"><span class="account-pill-dot" aria-hidden="true"></span><span>Account · 2FA</span></a>
+            <a id="nav-quote-pill" class="quote-pill-nav" href="/contact">Quote: ₱62,500 + ₱12,000/mo</a>
+          </div>
         </div>
       </div>
     </nav>
@@ -153,7 +156,14 @@
           <div class="col-lg-6">
             <div class="ledger-panel p-4 h-100">
               <h2 class="h4 mt-0 mb-3">Workshop Layout &amp; Tools</h2>
-              <img src="./assets/img/esd-bench.svg" width="640" height="360" class="img-fluid border border-dark mb-3" alt="Katipunan 28 sqm assembly bench, 24h test rack, and loaner PC area">
+              <div class="row g-2 mb-3">
+                <div class="col-sm-6">
+                  <img src="./assets/img/esd-bench.svg" width="640" height="360" class="img-fluid border border-dark h-100" style="object-fit: cover;" alt="Katipunan 28 sqm assembly bench, 24h test rack, and loaner PC area">
+                </div>
+                <div class="col-sm-6">
+                  <img src="./assets/img/photo-components.jpg" width="1000" height="667" class="img-fluid border border-dark h-100" style="object-fit: cover;" alt="Ryzen processor staged on static-safe PC chassis prior to motherboard seating">
+                </div>
+              </div>
               <div class="table-responsive">
                 <table class="table table-esd table-striped align-middle small">
                   <thead>

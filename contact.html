@@ -23,17 +23,20 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
         </button>
         <div class="collapse navbar-collapse" id="mainNav">
-          <ul class="navbar-nav me-auto mb-2 mb-xl-0 ms-xl-3 gap-xl-1">
-            <li class="nav-item"><a class="nav-link" data-nav="index" href="/">Home</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="about" href="/about">About</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="services" href="/services">Services</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="market" href="/market">Market</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="marketing" href="/marketing">Marketing</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="operations" href="/operations">Operations</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="financials" href="/financials">Financials</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="contact" href="/contact">Contact</a></li>
+          <ul class="navbar-nav esd-cal-rail mx-xl-auto mb-2 mb-xl-0">
+            <li class="nav-item"><a class="nav-link" data-nav="index" href="/"><span class="esd-nav-idx">01</span><span>Home</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="about" href="/about"><span class="esd-nav-idx">02</span><span>About</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="services" href="/services"><span class="esd-nav-idx">03</span><span>Services</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="market" href="/market"><span class="esd-nav-idx">04</span><span>Market</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="marketing" href="/marketing"><span class="esd-nav-idx">05</span><span>Marketing</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="operations" href="/operations"><span class="esd-nav-idx">06</span><span>Operations</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="financials" href="/financials"><span class="esd-nav-idx">07</span><span>Financials</span></a></li>
+            <li class="nav-item"><a class="nav-link active" data-nav="contact" href="/contact" aria-current="page"><span class="esd-nav-idx">08</span><span>Contact</span></a></li>
           </ul>
-          <a id="nav-quote-pill" class="quote-pill-nav d-inline-block mt-2 mt-xl-0" href="/checkout">Quote: ₱62,500</a>
+          <div class="esd-nav-actions d-flex align-items-center gap-2 mt-2 mt-xl-0">
+            <a id="nav-account-pill" class="account-pill-nav" href="/account"><span class="account-pill-dot" aria-hidden="true"></span><span>Account · 2FA</span></a>
+            <a id="nav-quote-pill" class="quote-pill-nav" href="/checkout">Quote: ₱62,500</a>
+          </div>
         </div>
       </div>
     </nav>
@@ -44,8 +47,8 @@
 
     <section class="page-header-light">
       <div class="container-xxl">
-        <h1>Contact</h1>
-        <p class="page-lead">Loyola Heights workshop info and quick inquiry form.</p>
+        <h1>Official Correspondence</h1>
+        <p class="page-lead">Direct proprietor contact, Loyola Heights workshop coordinates, and formal quotation inquiries.</p>
       </div>
     </section>
 
@@ -54,11 +57,28 @@
         <div class="row g-4 align-items-start">
           <div class="col-lg-5">
             <div class="ledger-panel p-4 mb-4">
-              <h2 class="h4 mt-0 mb-2">Workshop</h2>
-              <p class="small mb-2">Unit 204, Esteban Abada Strip, Loyola Heights, QC</p>
-              <p class="font-mono-data small mb-2">Mon–Sat, 9 AM–7 PM · +63 2 8421 7790 / 0917 555 0184</p>
-              <p class="mb-2"><a class="font-mono-data small" href="mailto:proposals@nvidium.ph">proposals@nvidium.ph</a></p>
-              <div class="small d-flex flex-wrap gap-3">
+              <h2 class="h4 mt-0 mb-3">Proprietor &amp; Workshop Directory</h2>
+              <div class="ledger-divider-row">
+                <span>Principal Proprietor</span>
+                <strong>Uzel Hector M. Escobido</strong>
+              </div>
+              <div class="ledger-divider-row">
+                <span>Electronic Mail</span>
+                <a class="font-mono-data small" href="mailto:uEscobido@l-ala.studio">uEscobido@l-ala.studio</a>
+              </div>
+              <div class="ledger-divider-row">
+                <span>Workshop Address</span>
+                <span class="text-end small">Unit 204, Esteban Abada Strip, Loyola Heights, QC</span>
+              </div>
+              <div class="ledger-divider-row">
+                <span>Consultation Hours</span>
+                <span class="font-mono-data small text-end">Mon–Sat, 09:00–19:00</span>
+              </div>
+              <div class="ledger-divider-row">
+                <span>Telephone</span>
+                <span class="font-mono-data small text-end">+63 2 8421 7790 / 0917 555 0184</span>
+              </div>
+              <div class="small d-flex flex-wrap gap-3 pt-3">
                 <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
                 <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
                 <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
@@ -108,29 +128,29 @@
 
           <div class="col-lg-7">
             <div class="ledger-panel p-4 p-lg-4 mb-4 no-print">
-              <h2 class="h3 mt-0 mb-1">Message Nvidium</h2>
-              <p class="small text-secondary mb-3">Ask a question or generate a printable slip.</p>
+              <h2 class="h3 mt-0 mb-1">Submit a Formal Quotation Inquiry</h2>
+              <p class="small text-secondary mb-3">Address inquiries to Uzel Hector M. Escobido, Principal Proprietor, or generate a printable reference dossier.</p>
 
               <form id="proposal-contact-form" novalidate>
                 <div class="row g-3">
                   <div class="col-12">
-                    <label for="contact-name" class="form-label fw-bold small">Name *</label>
-                    <input id="contact-name" type="text" class="form-control" required placeholder="Mateo Santos">
-                    <div class="invalid-feedback">Please enter your name.</div>
+                    <label for="contact-name" class="form-label fw-bold small">Full Legal Name *</label>
+                    <input id="contact-name" type="text" class="form-control" required placeholder="Juan Dela Cruz">
+                    <div class="invalid-feedback">Please enter your full name.</div>
                   </div>
                   <div class="col-md-6">
-                    <label for="contact-email" class="form-label fw-bold small">Email *</label>
-                    <input id="contact-email" type="email" class="form-control" required placeholder="name@example.ph">
-                    <div class="invalid-feedback">Please enter a valid email.</div>
+                    <label for="contact-email" class="form-label fw-bold small">Official Email Address *</label>
+                    <input id="contact-email" type="email" class="form-control" required placeholder="name@institution.ph">
+                    <div class="invalid-feedback">Please enter a valid email address.</div>
                   </div>
                   <div class="col-md-6">
-                    <label for="contact-phone" class="form-label fw-bold small">PH Mobile *</label>
+                    <label for="contact-phone" class="form-label fw-bold small">Contact Mobile (PH) *</label>
                     <input id="contact-phone" type="tel" class="form-control num-php" required placeholder="09171234567">
                     <div class="invalid-feedback">Enter a valid PH mobile number (09XXXXXXXXX or +639XXXXXXXXX).</div>
                   </div>
                   <div class="col-12">
-                    <label for="contact-notes" class="form-label fw-bold small">Message (Optional)</label>
-                    <textarea id="contact-notes" class="form-control" rows="2" placeholder="Questions, apps used, or pickup time."></textarea>
+                    <label for="contact-notes" class="form-label fw-bold small">Technical Requirements &amp; Schedule (Optional)</label>
+                    <textarea id="contact-notes" class="form-control" rows="2" placeholder="Specify CAD/3D software requirements, office workstation count, or preferred workshop consultation schedule."></textarea>
                   </div>
                   <div class="col-12">
                     <details class="esd-details">
@@ -164,7 +184,7 @@
                     </div>
                   </div>
                   <div class="col-12 pt-1">
-                    <button type="submit" class="btn btn-copper">Create Quote Slip</button>
+                    <button type="submit" class="btn btn-copper">Generate Formal Inquiry Dossier</button>
                   </div>
                 </div>
               </form>
@@ -173,21 +193,21 @@
             <div id="dossier-confirmation-slip" class="ledger-panel p-4 d-none" aria-live="polite">
               <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 mb-3 border-bottom border-dark">
                 <div>
-                  <h2 class="h4 my-0">Slip Ready</h2>
-                  <p class="small text-secondary mb-0">Subject to workshop part check</p>
+                  <h2 class="h4 my-0">Official Inquiry Dossier</h2>
+                  <p class="small text-secondary mb-0">Subject to workshop component availability</p>
                 </div>
                 <span id="slip-ref-id" class="status-chip status-chip-copper">NV-2026-0000</span>
               </div>
               <p class="mb-1 fw-bold" id="slip-client-line"></p>
               <p class="small font-mono-data text-secondary mb-3" id="slip-contact-line"></p>
               <details class="esd-details mb-3">
-                <summary class="font-mono-data small">View plain-text quote slip</summary>
+                <summary class="font-mono-data small">View formal quotation summary</summary>
                 <pre id="slip-summary-pre" class="p-3 mt-2 border border-dark bg-light small font-mono-data mb-0" style="white-space: pre-wrap;"></pre>
               </details>
               <div class="d-flex flex-wrap gap-2 no-print">
                 <button id="print-dossier-btn" type="button" class="btn btn-teal btn-sm">Print / PDF</button>
                 <button id="copy-dossier-btn" type="button" class="btn btn-ink-outline btn-sm">Copy</button>
-                <a id="mailto-dossier-link" href="mailto:proposals@nvidium.ph" class="btn btn-ink-outline btn-sm">Email Draft</a>
+                <a id="mailto-dossier-link" href="mailto:uEscobido@l-ala.studio" class="btn btn-ink-outline btn-sm">Compose Formal Email</a>
               </div>
               <div id="copy-feedback" class="small font-mono-data mt-2 text-success"></div>
             </div>

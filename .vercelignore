@@ -1,5 +1,7 @@
 .impeccable/
+node_modules/
 DESIGN.md
 PRODUCT.md
 concepts_brief.md
 .gitignore
+.env*

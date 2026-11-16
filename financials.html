@@ -23,17 +23,20 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
         </button>
         <div class="collapse navbar-collapse" id="mainNav">
-          <ul class="navbar-nav me-auto mb-2 mb-xl-0 ms-xl-3 gap-xl-1">
-            <li class="nav-item"><a class="nav-link" data-nav="index" href="/">Home</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="about" href="/about">About</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="services" href="/services">Services</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="market" href="/market">Market</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="marketing" href="/marketing">Marketing</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="operations" href="/operations">Operations</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="financials" href="/financials">Financials</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="contact" href="/contact">Contact</a></li>
+          <ul class="navbar-nav esd-cal-rail mx-xl-auto mb-2 mb-xl-0">
+            <li class="nav-item"><a class="nav-link" data-nav="index" href="/"><span class="esd-nav-idx">01</span><span>Home</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="about" href="/about"><span class="esd-nav-idx">02</span><span>About</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="services" href="/services"><span class="esd-nav-idx">03</span><span>Services</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="market" href="/market"><span class="esd-nav-idx">04</span><span>Market</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="marketing" href="/marketing"><span class="esd-nav-idx">05</span><span>Marketing</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="operations" href="/operations"><span class="esd-nav-idx">06</span><span>Operations</span></a></li>
+            <li class="nav-item"><a class="nav-link active" data-nav="financials" href="/financials" aria-current="page"><span class="esd-nav-idx">07</span><span>Financials</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="contact" href="/contact"><span class="esd-nav-idx">08</span><span>Contact</span></a></li>
           </ul>
-          <a id="nav-quote-pill" class="quote-pill-nav d-inline-block mt-2 mt-xl-0" href="/checkout">Quote: ₱62,500</a>
+          <div class="esd-nav-actions d-flex align-items-center gap-2 mt-2 mt-xl-0">
+            <a id="nav-account-pill" class="account-pill-nav" href="/account"><span class="account-pill-dot" aria-hidden="true"></span><span>Account · 2FA</span></a>
+            <a id="nav-quote-pill" class="quote-pill-nav" href="/checkout">Quote: ₱62,500</a>
+          </div>
         </div>
       </div>
     </nav>

@@ -1759,6 +1759,47 @@
         renderQuoteSummary(resetState);
       });
     }
+
+    var saveBuildBtn = document.getElementById('save-build-account-btn');
+    var saveBuildFeedback = document.getElementById('save-build-feedback');
+    if (saveBuildBtn) {
+      saveBuildBtn.addEventListener('click', function () {
+        var curState = ProposalStore.get();
+        var tot = curState.totals;
+        var pay = tot.payment || computeCustomerPaymentPlan(tot.hardwareTotalPhp, curState.activeQuote.paymentPlan);
+        if (saveBuildFeedback) {
+          saveBuildFeedback.textContent = 'Saving to account...';
+        }
+        saveAccountPurchase({
+          itemKind: 'saved_quote',
+          orderRef: 'NV-BLD-' + String(Math.floor(1000 + (Date.now() % 9000))),
+          buildTitle: tot.displayTitle,
+          qty: tot.qty,
+          hardwareTotalPhp: tot.hardwareTotalPhp,
+          dueTodayPhp: pay.downPaymentPhp,
+          paymentPlan: pay.plan.shortName,
+          slaLabel: tot.monthlySlaPhp > 0 ? tot.sla.name + ' (' + formatPhp(tot.monthlySlaPhp) + '/mo)' : 'Free 1-Yr Warranty',
+          statusLabel: 'Saved Build',
+          quoteState: curState.activeQuote
+        }).then(function (res) {
+          if (res.status === 401) {
+            if (saveBuildFeedback) {
+              saveBuildFeedback.innerHTML = 'Sign in with 2FA required — <a href="/account" class="text-white text-decoration-underline">Open Account</a>';
+            }
+            return;
+          }
+          if (!res.ok) {
+            if (saveBuildFeedback) {
+              saveBuildFeedback.textContent = (res.data && res.data.error) || 'Unable to save build.';
+            }
+            return;
+          }
+          if (saveBuildFeedback) {
+            saveBuildFeedback.innerHTML = 'Saved to account — <a href="/account" class="text-white text-decoration-underline">View Vault</a>';
+          }
+        });
+      });
+    }
   }
 
   function initMarketCalculator() {
@@ -2699,7 +2740,8 @@
       var downPct = Math.round(pay.plan.upFrontRatio * 100);
       var buyerLabel = t.buyerType === 'b2b' ? 'Office / Business / Studio (B2B)' : 'Personal / Student / Individual (B2C)';
       var lines = [
-        'NVIDIUM — CUSTOM PC & SUPPORT QUOTE REQUEST',
+        'NVIDIUM — FORMAL QUOTATION & SUPPORT REQUEST',
+        'Recipient: Uzel Hector M. Escobido, Principal Proprietor (uEscobido@l-ala.studio)',
         'Reference ID: ' + refId,
         'Order Type: ' + buyerLabel,
         'Name: ' + nameVal,
@@ -2771,8 +2813,8 @@
       if (mailtoLink) {
         mailtoLink.setAttribute(
           'href',
-          'mailto:proposals@nvidium.ph?subject=' +
-            encodeURIComponent('Nvidium Proposal Inquiry ' + refId) +
+          'mailto:uEscobido@l-ala.studio?subject=' +
+            encodeURIComponent('Nvidium Formal Quotation Inquiry ' + refId) +
             '&body=' +
             encodeURIComponent(summaryText)
         );
@@ -3247,6 +3289,22 @@
           storageRestricted = true;
         }
 
+        if (!immediate && breakdown && breakdown.totals) {
+          saveAccountPurchase({
+            itemKind: 'confirmed_order',
+            orderRef: orderRef,
+            buildTitle: breakdown.totals.displayTitle,
+            qty: breakdown.totals.qty,
+            hardwareTotalPhp: breakdown.totalPayableWithDeliv,
+            dueTodayPhp: breakdown.dueTodayPhp,
+            paymentPlan: breakdown.payFull ? 'Paid 100%' : breakdown.pay.plan.shortName,
+            slaLabel: breakdown.totals.monthlySlaPhp > 0 ? breakdown.totals.sla.name + ' (' + formatPhp(breakdown.totals.monthlySlaPhp) + '/mo)' : 'Free 1-Yr Warranty',
+            statusLabel: paymentStatusLabel,
+            quoteState: ProposalStore.get().activeQuote,
+            receiptText: receiptText
+          });
+        }
+
         if (pageTitleEl) {
           pageTitleEl.classList.add('d-none');
         }
@@ -3366,6 +3424,385 @@
     }
   });
 
+  var currentAccountUser = null;
+
+  function fetchSessionUser() {
+    if (typeof globalScope.fetch !== 'function') {
+      return Promise.resolve(null);
+    }
+    return globalScope.fetch('/api/auth', { credentials: 'same-origin' })
+      .then(function (r) {
+        return r.ok ? r.json() : { authenticated: false, user: null };
+      })
+      .then(function (data) {
+        currentAccountUser = data && data.authenticated ? data.user : null;
+        return currentAccountUser;
+      })
+      .catch(function () {
+        currentAccountUser = null;
+        return null;
+      });
+  }
+
+  function saveAccountPurchase(payload) {
+    if (typeof globalScope.fetch !== 'function') {
+      return Promise.resolve({ ok: false, status: 0, data: null });
+    }
+    return globalScope.fetch('/api/purchases', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload || {})
+    })
+      .then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (data) {
+          return { ok: r.ok, status: r.status, data: data };
+        });
+      })
+      .catch(function () {
+        return { ok: false, status: 0, data: { error: 'Network error' } };
+      });
+  }
+
+  function syncAccountSessionUI(user) {
+    var pill = document.getElementById('nav-account-pill');
+    if (pill) {
+      var labelSpan = pill.querySelector('span:last-child');
+      if (user) {
+        pill.classList.add('is-signed-in');
+        var shortName = String(user.fullName || user.email || 'Account').split(' ')[0];
+        if (labelSpan) {
+          labelSpan.textContent = shortName + ' · 2FA';
+        }
+      } else {
+        pill.classList.remove('is-signed-in');
+        if (labelSpan) {
+          labelSpan.textContent = 'Account · 2FA';
+        }
+      }
+    }
+
+    var chkStatus = document.getElementById('chk-account-status');
+    var chkLink = document.getElementById('chk-account-link');
+    var chkName = document.getElementById('chk-name');
+    var chkEmail = document.getElementById('chk-email');
+    if (chkStatus) {
+      if (user) {
+        chkStatus.textContent = 'Signed in as ' + user.fullName + ' (' + user.email + ') — Confirmed orders save to your vault.';
+        if (chkLink) {
+          chkLink.textContent = 'View Vault';
+        }
+        if (chkName && !chkName.value.trim()) {
+          chkName.value = user.fullName || '';
+        }
+        if (chkEmail && !chkEmail.value.trim()) {
+          chkEmail.value = user.email || '';
+        }
+      } else {
+        chkStatus.textContent = 'Sign in with 2FA to save confirmed orders under your account.';
+        if (chkLink) {
+          chkLink.textContent = 'Sign In / Account';
+        }
+      }
+    }
+  }
+
+  function initAccountPage() {
+    var root = document.getElementById('account-app');
+    if (!root) {
+      return;
+    }
+
+    var authPanel = document.getElementById('account-auth-panel');
+    var vaultPanel = document.getElementById('account-vault-panel');
+    var modeButtons = root.querySelectorAll('[data-auth-mode]');
+    var credForm = document.getElementById('auth-credentials-form');
+    var totpForm = document.getElementById('auth-totp-form');
+    var nameGroup = document.getElementById('auth-name-group');
+    var fullNameInput = document.getElementById('auth-full-name');
+    var emailInput = document.getElementById('auth-email');
+    var passwordInput = document.getElementById('auth-password');
+    var credSubmitBtn = document.getElementById('auth-credentials-submit');
+    var enrollBox = document.getElementById('auth-enroll-box');
+    var loginNote = document.getElementById('auth-login-2fa-note');
+    var qrBox = document.getElementById('auth-qr-box');
+    var secretEl = document.getElementById('auth-totp-secret');
+    var copySecretBtn = document.getElementById('auth-copy-secret-btn');
+    var totpCodeInput = document.getElementById('auth-totp-code');
+    var totpBackBtn = document.getElementById('auth-totp-back');
+    var errorAlert = document.getElementById('auth-error-alert');
+    var logoutBtn = document.getElementById('vault-logout-btn');
+    var refreshBtn = document.getElementById('vault-refresh-btn');
+    var purchasesList = document.getElementById('vault-purchases-list');
+
+    var authMode = 'login';
+    var pendingChallenge = '';
+
+    function showAuthError(msg) {
+      if (!errorAlert) return;
+      if (!msg) {
+        errorAlert.classList.add('d-none');
+        errorAlert.textContent = '';
+      } else {
+        errorAlert.textContent = msg;
+        errorAlert.classList.remove('d-none');
+      }
+    }
+
+    function setAuthMode(mode) {
+      authMode = mode === 'signup' ? 'signup' : 'login';
+      showAuthError('');
+      modeButtons.forEach(function (btn) {
+        var active = btn.getAttribute('data-auth-mode') === authMode;
+        btn.classList.toggle('is-active', active);
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      if (nameGroup) {
+        nameGroup.classList.toggle('d-none', authMode !== 'signup');
+      }
+      if (fullNameInput) {
+        fullNameInput.required = authMode === 'signup';
+      }
+      if (passwordInput) {
+        passwordInput.setAttribute('autocomplete', authMode === 'signup' ? 'new-password' : 'current-password');
+      }
+      if (credSubmitBtn) {
+        credSubmitBtn.textContent = authMode === 'signup' ? 'Create Account & Setup 2FA' : 'Continue to 2FA Verification';
+      }
+      if (credForm) credForm.classList.remove('d-none');
+      if (totpForm) totpForm.classList.add('d-none');
+    }
+
+    function escapeHtmlText(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function renderPurchasesList(items) {
+      if (!purchasesList) return;
+      if (!items || items.length === 0) {
+        purchasesList.innerHTML = '<div class="esd-well text-center small text-secondary py-4">No saved builds or confirmed orders yet. <a href="/services">Configure a PC build</a> or complete <a href="/checkout">checkout</a> while signed in.</div>';
+        return;
+      }
+      purchasesList.innerHTML = items.map(function (item) {
+        var stateHrefSuffix = '';
+        try {
+          var parsedQuote = JSON.parse(item.quote_state_json || '{}');
+          if (parsedQuote && parsedQuote.tierId) {
+            var q = new URLSearchParams();
+            q.set('buyer', parsedQuote.buyerType || 'b2c');
+            q.set('pay', parsedQuote.paymentPlan || 'split-70-30');
+            q.set('tier', parsedQuote.tierId);
+            q.set('qty', String(parsedQuote.qty || 1));
+            q.set('sla', parsedQuote.slaId || 'none');
+            if (parsedQuote.parts) {
+              q.set('parts', encodePartsParam(parsedQuote.parts));
+            }
+            stateHrefSuffix = '?' + q.toString();
+          }
+        } catch (_e) {}
+
+        var chipClass = item.item_kind === 'confirmed_order' ? 'status-chip status-chip-copper' : 'status-chip';
+        var receiptHtml = item.receipt_text
+          ? '<details class="esd-details mt-2"><summary class="font-mono-data small">View official receipt</summary><pre class="p-2 mt-2 border border-dark bg-light small font-mono-data mb-0" style="white-space: pre-wrap;">' + escapeHtmlText(item.receipt_text) + '</pre></details>'
+          : '';
+        return (
+          '<article class="esd-well">' +
+            '<div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2">' +
+              '<div>' +
+                '<span class="' + chipClass + ' mb-1 d-inline-block">' + escapeHtmlText(item.status_label) + '</span>' +
+                '<h3 class="h6 my-0">' + escapeHtmlText(item.build_title) + ' &times; ' + String(item.qty || 1) + '</h3>' +
+                '<span class="font-mono-data small text-secondary">' + escapeHtmlText(item.order_ref) + ' · ' + escapeHtmlText(item.sla_label) + '</span>' +
+              '</div>' +
+              '<div class="text-end">' +
+                '<strong class="num-php d-block">' + formatPhp(item.hardware_total_php || 0) + '</strong>' +
+                '<span class="font-mono-data small text-secondary">Due today: ' + formatPhp(item.due_today_php || 0) + '</span>' +
+              '</div>' +
+            '</div>' +
+            receiptHtml +
+            '<div class="d-flex flex-wrap gap-2 mt-3">' +
+              '<a href="/services' + stateHrefSuffix + '" class="btn btn-ink-outline btn-sm">Load in Builder</a>' +
+              '<a href="/checkout' + stateHrefSuffix + '" class="btn btn-teal btn-sm">Checkout</a>' +
+              '<button type="button" class="btn btn-ink-outline btn-sm ms-auto" data-delete-purchase="' + escapeHtmlText(item.id) + '">Remove</button>' +
+            '</div>' +
+          '</article>'
+        );
+      }).join('');
+
+      purchasesList.querySelectorAll('[data-delete-purchase]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var targetId = btn.getAttribute('data-delete-purchase');
+          btn.disabled = true;
+          globalScope.fetch('/api/purchases?id=' + encodeURIComponent(targetId), {
+            method: 'DELETE',
+            credentials: 'same-origin'
+          }).then(function () {
+            loadPurchasesVault();
+          });
+        });
+      });
+    }
+
+    function loadPurchasesVault() {
+      if (!purchasesList || typeof globalScope.fetch !== 'function') return;
+      purchasesList.innerHTML = '<div class="small font-mono-data text-secondary">Loading saved purchases...</div>';
+      globalScope.fetch('/api/purchases', { credentials: 'same-origin' })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          renderPurchasesList(data.purchases || []);
+        })
+        .catch(function () {
+          purchasesList.innerHTML = '<div class="small text-danger">Unable to load saved records.</div>';
+        });
+    }
+
+    function enterVault(user) {
+      currentAccountUser = user;
+      syncAccountSessionUI(user);
+      if (authPanel) authPanel.classList.add('d-none');
+      if (vaultPanel) vaultPanel.classList.remove('d-none');
+      setText('vault-user-name', user.fullName || 'Client');
+      setText('vault-user-email', user.email || '');
+      loadPurchasesVault();
+    }
+
+    function exitVault() {
+      currentAccountUser = null;
+      syncAccountSessionUI(null);
+      if (vaultPanel) vaultPanel.classList.add('d-none');
+      if (authPanel) authPanel.classList.remove('d-none');
+      setAuthMode('login');
+    }
+
+    modeButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setAuthMode(btn.getAttribute('data-auth-mode'));
+      });
+    });
+
+    if (credForm) {
+      credForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        showAuthError('');
+        var payload = {
+          action: authMode,
+          email: emailInput ? emailInput.value.trim() : '',
+          password: passwordInput ? passwordInput.value : ''
+        };
+        if (authMode === 'signup') {
+          payload.fullName = fullNameInput ? fullNameInput.value.trim() : '';
+        }
+        if (credSubmitBtn) credSubmitBtn.disabled = true;
+        globalScope.fetch('/api/auth', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+          .then(function (res) {
+            if (credSubmitBtn) credSubmitBtn.disabled = false;
+            if (!res.ok || !res.data.challengeToken) {
+              showAuthError((res.data && res.data.error) || 'Authentication failed.');
+              return;
+            }
+            pendingChallenge = res.data.challengeToken;
+            credForm.classList.add('d-none');
+            totpForm.classList.remove('d-none');
+            if (res.data.isEnrollment) {
+              if (enrollBox) enrollBox.classList.remove('d-none');
+              if (loginNote) loginNote.classList.add('d-none');
+              if (qrBox) qrBox.innerHTML = res.data.qrSvg || '';
+              if (secretEl) secretEl.textContent = res.data.totpSecret || '';
+            } else {
+              if (enrollBox) enrollBox.classList.add('d-none');
+              if (loginNote) loginNote.classList.remove('d-none');
+            }
+            if (totpCodeInput) {
+              totpCodeInput.value = '';
+              totpCodeInput.focus();
+            }
+          })
+          .catch(function () {
+            if (credSubmitBtn) credSubmitBtn.disabled = false;
+            showAuthError('Network error contacting authentication service.');
+          });
+      });
+    }
+
+    if (copySecretBtn && secretEl) {
+      copySecretBtn.addEventListener('click', function () {
+        if (globalScope.navigator && globalScope.navigator.clipboard) {
+          globalScope.navigator.clipboard.writeText(secretEl.textContent || '');
+          copySecretBtn.textContent = 'Copied';
+          setTimeout(function () { copySecretBtn.textContent = 'Copy Key'; }, 1500);
+        }
+      });
+    }
+
+    if (totpBackBtn) {
+      totpBackBtn.addEventListener('click', function () {
+        pendingChallenge = '';
+        setAuthMode(authMode);
+      });
+    }
+
+    if (totpForm) {
+      totpForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        showAuthError('');
+        var codeVal = totpCodeInput ? totpCodeInput.value.trim() : '';
+        globalScope.fetch('/api/auth', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'verify_2fa',
+            challengeToken: pendingChallenge,
+            code: codeVal
+          })
+        })
+          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+          .then(function (res) {
+            if (!res.ok || !res.data.authenticated) {
+              showAuthError((res.data && res.data.error) || 'Invalid 2FA code.');
+              return;
+            }
+            enterVault(res.data.user);
+          })
+          .catch(function () {
+            showAuthError('Network error verifying 2FA code.');
+          });
+      });
+    }
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', function () {
+        globalScope.fetch('/api/auth', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'logout' })
+        }).then(exitVault);
+      });
+    }
+
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', loadPurchasesVault);
+    }
+
+    fetchSessionUser().then(function (u) {
+      if (u) {
+        enterVault(u);
+      } else {
+        setAuthMode('login');
+      }
+    });
+  }
+
   function bootstrapApp() {
     initNavAndWayfinding();
     initServicesConfigurator();
@@ -3375,6 +3812,8 @@
     initFinancialSimulator();
     initContactProposalForm();
     initCheckoutPage();
+    initAccountPage();
+    fetchSessionUser().then(syncAccountSessionUI);
   }
 
   document.addEventListener('DOMContentLoaded', bootstrapApp);

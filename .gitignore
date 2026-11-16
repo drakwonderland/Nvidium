@@ -35,3 +35,4 @@ src/plugins/impeccable-live.client.ts
 
 .vercel
 .env*
+node_modules/

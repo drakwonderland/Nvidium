@@ -25,17 +25,20 @@
           </svg>
         </button>
         <div class="collapse navbar-collapse" id="mainNav">
-          <ul class="navbar-nav me-auto mb-2 mb-xl-0 ms-xl-3 gap-xl-1">
-            <li class="nav-item"><a class="nav-link" data-nav="index" href="/">Home</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="about" href="/about">About</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="services" href="/services">Services</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="market" href="/market">Market</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="marketing" href="/marketing">Marketing</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="operations" href="/operations">Operations</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="financials" href="/financials">Financials</a></li>
-            <li class="nav-item"><a class="nav-link" data-nav="contact" href="/contact">Contact</a></li>
+          <ul class="navbar-nav esd-cal-rail mx-xl-auto mb-2 mb-xl-0">
+            <li class="nav-item"><a class="nav-link active" data-nav="index" href="/" aria-current="page"><span class="esd-nav-idx">01</span><span>Home</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="about" href="/about"><span class="esd-nav-idx">02</span><span>About</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="services" href="/services"><span class="esd-nav-idx">03</span><span>Services</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="market" href="/market"><span class="esd-nav-idx">04</span><span>Market</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="marketing" href="/marketing"><span class="esd-nav-idx">05</span><span>Marketing</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="operations" href="/operations"><span class="esd-nav-idx">06</span><span>Operations</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="financials" href="/financials"><span class="esd-nav-idx">07</span><span>Financials</span></a></li>
+            <li class="nav-item"><a class="nav-link" data-nav="contact" href="/contact"><span class="esd-nav-idx">08</span><span>Contact</span></a></li>
           </ul>
-          <a id="nav-quote-pill" class="quote-pill-nav d-inline-block mt-2 mt-xl-0" href="/checkout">Quote: ₱62,500</a>
+          <div class="esd-nav-actions d-flex align-items-center gap-2 mt-2 mt-xl-0">
+            <a id="nav-account-pill" class="account-pill-nav" href="/account"><span class="account-pill-dot" aria-hidden="true"></span><span>Account · 2FA</span></a>
+            <a id="nav-quote-pill" class="quote-pill-nav" href="/checkout">Quote: ₱62,500</a>
+          </div>
         </div>
       </div>
     </nav>
@@ -119,6 +122,45 @@
             <h2>4-hour local support</h2>
             <p>Office care plans (₱12k–₱29k/mo) include chat triage, 8 km visits, and loaner PCs.</p>
           </article>
+        </div>
+
+        <div class="mb-5">
+          <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-2 mb-3">
+            <h2 class="h4 my-0">Creator &amp; Studio Builds</h2>
+            <a href="/services" class="small fw-semibold">Configure parts &rarr;</a>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <article class="esd-photo-card">
+                <img src="./assets/img/photo-creator-rig.jpg" width="1200" height="750" class="esd-photo-media" alt="Dual-monitor content creator workstation with camera tripod and RTX desktop tower">
+                <div class="esd-photo-meta">
+                  <h3 class="h6 mt-0 mb-1">Creator Editing Desk</h3>
+                  <p class="small text-secondary mb-1">Dual-display editing &amp; streaming rig built around quiet RTX acoustics.</p>
+                  <span class="font-mono-data small text-secondary">Photo: Ella Don</span>
+                </div>
+              </article>
+            </div>
+            <div class="col-md-4">
+              <article class="esd-photo-card">
+                <img src="./assets/img/photo-dual-tower.jpg" width="1200" height="750" class="esd-photo-media" alt="Liquid-cooled custom studio PC build with dual monitors on hardwood desk">
+                <div class="esd-photo-meta">
+                  <h3 class="h6 mt-0 mb-1">3D &amp; Color Suite Rig</h3>
+                  <p class="small text-secondary mb-1">High-airflow multi-GPU chassis for Blender, DaVinci Resolve, and CAD.</p>
+                  <span class="font-mono-data small text-secondary">Photo: Đào Hiếu</span>
+                </div>
+              </article>
+            </div>
+            <div class="col-md-4">
+              <article class="esd-photo-card">
+                <img src="./assets/img/photo-workstation-tower.jpg" width="1200" height="750" class="esd-photo-media" alt="Compact matte black mesh workstation desktop tower beside display on wood desk">
+                <div class="esd-photo-meta">
+                  <h3 class="h6 mt-0 mb-1">Quiet Mesh Tower</h3>
+                  <p class="small text-secondary mb-1">Zero-RGB perforated steel tower tuned for Loyola Heights architecture labs.</p>
+                  <span class="font-mono-data small text-secondary">Photo: Velocity Micro (CC BY 4.0)</span>
+                </div>
+              </article>
+            </div>
+          </div>
         </div>
 
         <div class="row g-4 align-items-start">
