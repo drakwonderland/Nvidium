@@ -35,7 +35,7 @@
           </ul>
           <div class="esd-nav-actions d-flex align-items-center gap-2 mt-2 mt-xl-0">
             <a id="nav-account-pill" class="account-pill-nav" href="/account"><span class="account-pill-dot" aria-hidden="true"></span><span>Account</span></a>
-            <a id="nav-quote-pill" class="quote-pill-nav" href="/checkout">Quote: ₱62,500</a>
+            <a id="nav-quote-pill" class="quote-pill-nav" href="/account">Sign in for Quote</a>
           </div>
         </div>
       </div>
@@ -335,49 +335,69 @@
 
             <div class="col-lg-5">
               <aside class="ledger-panel-dark spec-sheet-accent p-4 h-100 d-flex flex-column justify-content-between" aria-live="polite">
-                <div>
-                  <div class="d-flex justify-content-between align-items-center pb-2 mb-2 border-bottom border-light border-opacity-25 font-mono-data small">
-                    <span>Your quote</span>
-                    <span id="quote-provenance">Starting Quote</span>
+                <div id="service-quote-locked" class="d-flex flex-column justify-content-between h-100">
+                  <div>
+                    <div class="d-flex justify-content-between align-items-center pb-2 mb-3 border-bottom border-light border-opacity-25 font-mono-data small">
+                      <span>Your quote</span>
+                      <span style="color: var(--esd-copper-light);">Account required</span>
+                    </div>
+                    <p class="fw-bold fs-5 mb-2">Sign in to view quote &amp; order</p>
+                    <p class="small mb-0" style="color: var(--esd-teal-tint);">You need an active Nvidium account to generate a live quote, save custom builds, or place an order. Sign in or create your account below.</p>
                   </div>
-                  <p id="quote-tier-title" class="fw-bold fs-5 mb-1">Architect &amp; 3D PC x 1</p>
-                  <p id="quote-tier-specs" class="small mb-2" style="color: var(--esd-teal-tint);">Ryzen 7 7700 · 64GB DDR5 · Lexar NM790 2TB · RTX 4060 Ti 8GB</p>
-
-                  <details class="esd-details esd-details-dark my-2">
-                    <summary class="font-mono-data small">View itemized parts</summary>
-                    <div id="quote-parts-list" class="small pt-2 mt-2 border-top border-light border-opacity-25"></div>
-                  </details>
-
-                  <div class="ledger-divider-row">
-                    <span>Total PC Price</span>
-                    <strong id="quote-hardware-total" class="num-php fs-5">₱62,500</strong>
+                  <div class="d-grid gap-2 mt-4 no-print">
+                    <a id="service-quote-login-btn" href="/account?next=%2Fservices" class="btn btn-copper d-inline-flex align-items-center justify-content-center gap-2">
+                      <span>Sign in to Get Quote</span>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                    </a>
+                    <a id="service-quote-signup-btn" href="/account?mode=signup&amp;next=%2Fservices" class="btn btn-esd-outline btn-sm w-100">Create an Account</a>
                   </div>
-                  <div class="ledger-divider-row">
-                    <span id="quote-deposit-label">Due Today (70%)</span>
-                    <strong id="quote-deposit-due" class="num-php fs-5" style="color: var(--esd-copper-light);">₱43,750</strong>
-                  </div>
-                  <div class="ledger-divider-row">
-                    <span id="quote-balance-label">Balance on Pickup</span>
-                    <strong id="quote-balance-due" class="num-php">₱18,750</strong>
-                  </div>
-                  <div class="ledger-divider-row">
-                    <span>Support Plan</span>
-                    <strong id="quote-sla-monthly" class="num-php">₱0 / mo (Free Warranty)</strong>
-                  </div>
-                  <p id="quote-sla-terms" class="small mt-2 mb-0" style="color: var(--esd-teal-subtle);">Free 1-yr shop warranty in Quezon City.</p>
                 </div>
 
-                <div class="d-grid gap-2 mt-4 no-print">
-                  <a id="quote-to-checkout" href="/checkout" class="btn btn-copper d-inline-flex align-items-center justify-content-center gap-2">
-                    <span>Go to Checkout</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-                  </a>
-                  <button id="save-build-account-btn" type="button" class="btn btn-esd-outline btn-sm w-100">Save Build to Account</button>
-                  <div class="d-flex gap-2">
-                    <a id="quote-to-financials" href="/financials?view=buyer" class="btn btn-esd-outline btn-sm w-50">Installments</a>
-                    <a id="quote-to-contact" href="/contact" class="btn btn-esd-outline btn-sm w-50">Ask / Quote</a>
+                <div id="service-quote-unlocked" class="d-none flex-column justify-content-between h-100">
+                  <div>
+                    <div class="d-flex justify-content-between align-items-center pb-2 mb-2 border-bottom border-light border-opacity-25 font-mono-data small">
+                      <span>Your quote</span>
+                      <span id="quote-provenance">Starting Quote</span>
+                    </div>
+                    <p id="quote-tier-title" class="fw-bold fs-5 mb-1">Architect &amp; 3D PC x 1</p>
+                    <p id="quote-tier-specs" class="small mb-2" style="color: var(--esd-teal-tint);">Ryzen 7 7700 · 64GB DDR5 · Lexar NM790 2TB · RTX 4060 Ti 8GB</p>
+
+                    <details class="esd-details esd-details-dark my-2">
+                      <summary class="font-mono-data small">View itemized parts</summary>
+                      <div id="quote-parts-list" class="small pt-2 mt-2 border-top border-light border-opacity-25"></div>
+                    </details>
+
+                    <div class="ledger-divider-row">
+                      <span>Total PC Price</span>
+                      <strong id="quote-hardware-total" class="num-php fs-5">₱62,500</strong>
+                    </div>
+                    <div class="ledger-divider-row">
+                      <span id="quote-deposit-label">Due Today (70%)</span>
+                      <strong id="quote-deposit-due" class="num-php fs-5" style="color: var(--esd-copper-light);">₱43,750</strong>
+                    </div>
+                    <div class="ledger-divider-row">
+                      <span id="quote-balance-label">Balance on Pickup</span>
+                      <strong id="quote-balance-due" class="num-php">₱18,750</strong>
+                    </div>
+                    <div class="ledger-divider-row">
+                      <span>Support Plan</span>
+                      <strong id="quote-sla-monthly" class="num-php">₱0 / mo (Free Warranty)</strong>
+                    </div>
+                    <p id="quote-sla-terms" class="small mt-2 mb-0" style="color: var(--esd-teal-subtle);">Free 1-yr shop warranty in Quezon City.</p>
                   </div>
-                  <div id="save-build-feedback" class="small font-mono-data text-center" style="color: var(--esd-copper-light);"></div>
+
+                  <div class="d-grid gap-2 mt-4 no-print">
+                    <a id="quote-to-checkout" href="/checkout" class="btn btn-copper d-inline-flex align-items-center justify-content-center gap-2">
+                      <span>Go to Checkout</span>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                    </a>
+                    <button id="save-build-account-btn" type="button" class="btn btn-esd-outline btn-sm w-100">Save Build to Account</button>
+                    <div class="d-flex gap-2">
+                      <a id="quote-to-financials" href="/financials?view=buyer" class="btn btn-esd-outline btn-sm w-50">Installments</a>
+                      <a id="quote-to-contact" href="/contact" class="btn btn-esd-outline btn-sm w-50">Ask / Quote</a>
+                    </div>
+                    <div id="save-build-feedback" class="small font-mono-data text-center" style="color: var(--esd-copper-light);"></div>
+                  </div>
                 </div>
               </aside>
             </div>

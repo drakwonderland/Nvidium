@@ -35,7 +35,7 @@
           </ul>
           <div class="esd-nav-actions d-flex align-items-center gap-2 mt-2 mt-xl-0">
             <a id="nav-account-pill" class="account-pill-nav" href="/account"><span class="account-pill-dot" aria-hidden="true"></span><span>Account</span></a>
-            <a id="nav-quote-pill" class="quote-pill-nav" href="/checkout">Quote: ₱62,500</a>
+            <a id="nav-quote-pill" class="quote-pill-nav" href="/account">Sign in for Quote</a>
           </div>
         </div>
       </div>
@@ -70,30 +70,46 @@
 
           <div class="col-lg-5">
             <aside class="ledger-panel-dark spec-sheet-accent p-4 h-100 d-flex flex-column justify-content-between" aria-label="Live Quote Summary">
-              <div>
-                <div class="d-flex justify-content-between align-items-baseline gap-2 pb-3 mb-3 border-bottom border-light border-opacity-25">
-                  <span class="fw-semibold">Saved PC Spec Sheet</span>
-                  <span id="home-ledger-status" class="font-mono-data small" style="color: var(--esd-teal-subtle);">Starting quote</span>
+              <div id="home-quote-locked" class="d-flex flex-column justify-content-between h-100">
+                <div>
+                  <div class="d-flex justify-content-between align-items-baseline gap-2 pb-3 mb-3 border-bottom border-light border-opacity-25">
+                    <span class="fw-semibold">Saved PC Spec Sheet</span>
+                    <span class="font-mono-data small" style="color: var(--esd-copper-light);">Account required</span>
+                  </div>
+                  <p class="fw-semibold fs-5 mb-2">Sign in to view a quote or place an order</p>
+                  <p class="small mb-0" style="color: var(--esd-teal-tint);">Create a verified Nvidium account or sign in to generate live PC quotes, save configurations, and proceed to checkout.</p>
                 </div>
-                <div class="ledger-divider-row">
-                  <span>Build</span>
-                  <strong id="home-ledger-tier" class="num-php text-end">Architect &amp; 3D PC (x1)</strong>
-                </div>
-                <div class="ledger-divider-row">
-                  <span>Parts &amp; assembly</span>
-                  <strong id="home-ledger-total" class="num-php fs-5">₱62,500</strong>
-                </div>
-                <div class="ledger-divider-row">
-                  <span>70% down payment</span>
-                  <strong id="home-ledger-deposit" class="num-php fs-5" style="color: var(--esd-copper-light);">₱43,750</strong>
-                </div>
-                <div class="ledger-divider-row">
-                  <span>Support plan</span>
-                  <strong id="home-ledger-sla" class="num-php text-end">Free 1-Yr Warranty (₱0/mo)</strong>
+                <div class="d-grid gap-2 pt-3 mt-3 border-top border-light border-opacity-25 no-print">
+                  <a href="/account?next=%2Fservices" class="btn btn-copper btn-sm w-100">Sign in to Get Quote</a>
+                  <a href="/account?mode=signup&amp;next=%2Fservices" class="btn btn-esd-outline btn-sm w-100">Create an Account</a>
                 </div>
               </div>
-              <div class="pt-3 mt-3 border-top border-light border-opacity-25 no-print">
-                <a id="home-checkout-link" href="/checkout" class="btn btn-copper btn-sm w-100">Go to Checkout</a>
+              <div id="home-quote-unlocked" class="d-none flex-column justify-content-between h-100">
+                <div>
+                  <div class="d-flex justify-content-between align-items-baseline gap-2 pb-3 mb-3 border-bottom border-light border-opacity-25">
+                    <span class="fw-semibold">Saved PC Spec Sheet</span>
+                    <span id="home-ledger-status" class="font-mono-data small" style="color: var(--esd-teal-subtle);">Starting quote</span>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>Build</span>
+                    <strong id="home-ledger-tier" class="num-php text-end">Architect &amp; 3D PC (x1)</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>Parts &amp; assembly</span>
+                    <strong id="home-ledger-total" class="num-php fs-5">₱62,500</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>70% down payment</span>
+                    <strong id="home-ledger-deposit" class="num-php fs-5" style="color: var(--esd-copper-light);">₱43,750</strong>
+                  </div>
+                  <div class="ledger-divider-row">
+                    <span>Support plan</span>
+                    <strong id="home-ledger-sla" class="num-php text-end">Free 1-Yr Warranty (₱0/mo)</strong>
+                  </div>
+                </div>
+                <div class="pt-3 mt-3 border-top border-light border-opacity-25 no-print">
+                  <a id="home-checkout-link" href="/checkout" class="btn btn-copper btn-sm w-100">Go to Checkout</a>
+                </div>
               </div>
             </aside>
           </div>

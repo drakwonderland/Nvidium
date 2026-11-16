@@ -1198,13 +1198,18 @@
     var t = s.totals;
     var navBadge = document.getElementById('nav-quote-pill');
     if (navBadge) {
-      navBadge.textContent = 'Quote: ' + formatPhp(t.hardwareTotalPhp) + (t.monthlySlaPhp > 0 ? ' + ' + formatPhp(t.monthlySlaPhp) + '/mo' : '');
-      navBadge.setAttribute('href', ProposalStore.buildQueryHref('/checkout', s));
+      if (currentAccountUser) {
+        navBadge.textContent = 'Quote: ' + formatPhp(t.hardwareTotalPhp) + (t.monthlySlaPhp > 0 ? ' + ' + formatPhp(t.monthlySlaPhp) + '/mo' : '');
+        navBadge.setAttribute('href', ProposalStore.buildQueryHref('/checkout', s));
+      } else {
+        navBadge.textContent = 'Sign in for Quote';
+        navBadge.setAttribute('href', '/account');
+      }
     }
 
     var homeCheckoutLink = document.getElementById('home-checkout-link');
     if (homeCheckoutLink) {
-      homeCheckoutLink.setAttribute('href', ProposalStore.buildQueryHref('/checkout', s));
+      homeCheckoutLink.setAttribute('href', currentAccountUser ? ProposalStore.buildQueryHref('/checkout', s) : '/account?next=%2Fcheckout');
     }
 
     setText('home-ledger-tier', t.displayTitle + ' (x' + t.qty + ')');
@@ -3392,6 +3397,10 @@
       if (!form) {
         return;
       }
+      if (typeof globalScope.fetch === 'function' && !currentAccountUser) {
+        syncAccountSessionUI(null);
+        return;
+      }
 
       validatePhPhoneInput(document.getElementById('chk-phone'));
       form.classList.add('was-validated');
@@ -3563,7 +3572,7 @@
 
     try {
       var chkParams = new URLSearchParams(globalScope.location.search);
-      if (chkParams.get('success') === '1') {
+      if (chkParams.get('success') === '1' && (typeof globalScope.fetch !== 'function' || currentAccountUser)) {
         fillDemoBuyerFields();
         submitCheckoutOrder({ immediate: true });
       }
@@ -3621,9 +3630,12 @@
   }
 
   function syncAccountSessionUI(user) {
+    currentAccountUser = user || null;
+    updateGlobalTelemetryUI(ProposalStore.get());
+
     var pill = document.getElementById('nav-account-pill');
     if (pill) {
-      var labelSpan = pill.querySelector('span:last-child');
+      var labelSpan = typeof pill.querySelector === 'function' ? pill.querySelector('span:last-child') : null;
       if (user) {
         pill.classList.add('is-signed-in');
         var shortName = String(user.fullName || user.email || 'Account').split(' ')[0];
@@ -3638,10 +3650,57 @@
       }
     }
 
+    var homeLocked = document.getElementById('home-quote-locked');
+    var homeUnlocked = document.getElementById('home-quote-unlocked');
+    if (homeLocked && homeUnlocked) {
+      homeLocked.classList.toggle('d-none', Boolean(user));
+      homeLocked.classList.toggle('d-flex', !user);
+      homeUnlocked.classList.toggle('d-none', !user);
+      homeUnlocked.classList.toggle('d-flex', Boolean(user));
+    }
+
+    var serviceLocked = document.getElementById('service-quote-locked');
+    var serviceUnlocked = document.getElementById('service-quote-unlocked');
+    if (serviceLocked && serviceUnlocked) {
+      serviceLocked.classList.toggle('d-none', Boolean(user));
+      serviceLocked.classList.toggle('d-flex', !user);
+      serviceUnlocked.classList.toggle('d-none', !user);
+      serviceUnlocked.classList.toggle('d-flex', Boolean(user));
+    }
+
+    var chkGate = document.getElementById('checkout-auth-gate');
+    var chkBanner = document.getElementById('chk-account-banner');
+    var chkSummary = document.getElementById('checkout-summary-panel');
+    var chkForm = document.getElementById('checkout-form-panel');
+    var chkSuccess = document.getElementById('checkout-success-panel');
     var chkStatus = document.getElementById('chk-account-status');
     var chkLink = document.getElementById('chk-account-link');
     var chkName = document.getElementById('chk-name');
     var chkEmail = document.getElementById('chk-email');
+
+    if (chkGate) {
+      chkGate.classList.toggle('d-none', Boolean(user));
+    }
+    if (chkBanner) {
+      chkBanner.classList.toggle('d-none', !user);
+      chkBanner.classList.toggle('d-flex', Boolean(user));
+    }
+    if (chkSummary && chkForm) {
+      if (user) {
+        var showingSuccess = chkSuccess && !chkSuccess.classList.contains('d-none');
+        if (!showingSuccess) {
+          chkSummary.classList.remove('d-none');
+          chkForm.classList.remove('d-none');
+        }
+      } else {
+        chkSummary.classList.add('d-none');
+        chkForm.classList.add('d-none');
+        if (chkSuccess) {
+          chkSuccess.classList.add('d-none');
+        }
+      }
+    }
+
     if (chkStatus) {
       if (user) {
         chkStatus.textContent = 'Signed in as ' + user.fullName + ' (' + user.email + ') — Orders save to your account.';
@@ -3655,7 +3714,7 @@
           chkEmail.value = user.email || '';
         }
       } else {
-        chkStatus.textContent = 'Sign in to save confirmed orders to your account.';
+        chkStatus.textContent = 'Sign in to view a quote and place an order.';
         if (chkLink) {
           chkLink.textContent = 'Sign in';
         }
@@ -3863,6 +3922,14 @@
       }
       setTimeout(function () {
         if (successBox) successBox.classList.add('d-none');
+        try {
+          var acctParams = new URLSearchParams(globalScope.location.search);
+          var nextTarget = acctParams.get('next') || '';
+          if (nextTarget.indexOf('/') === 0 && nextTarget.indexOf('//') !== 0) {
+            globalScope.location.href = nextTarget;
+            return;
+          }
+        } catch (_err) {}
         enterVault(user);
       }, reduced ? 900 : SUCCESS_HOLD_MS);
     }
@@ -4153,7 +4220,14 @@
       if (u) {
         enterVault(u);
       } else {
-        setAuthMode('login');
+        var startMode = 'login';
+        try {
+          var initParams = new URLSearchParams(globalScope.location.search);
+          if (initParams.get('mode') === 'signup') {
+            startMode = 'signup';
+          }
+        } catch (_err) {}
+        setAuthMode(startMode);
       }
     });
   }
@@ -4195,4 +4269,5 @@
   globalScope.initFinancialSimulator = initFinancialSimulator;
   globalScope.initContactProposalForm = initContactProposalForm;
   globalScope.initCheckoutPage = initCheckoutPage;
+  globalScope.syncAccountSessionUI = syncAccountSessionUI;
 })(window);
