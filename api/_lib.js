@@ -39,6 +39,7 @@ export async function ensureSchema() {
           created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         )
       `;
+      await sql`CREATE INDEX IF NOT EXISTS idx_nvidium_sessions_expires ON nvidium_sessions(expires_at)`;
       await sql`
         CREATE TABLE IF NOT EXISTS nvidium_email_codes (
           id TEXT PRIMARY KEY,
@@ -67,6 +68,14 @@ export async function ensureSchema() {
           created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         )
       `;
+      await sql`CREATE INDEX IF NOT EXISTS idx_nvidium_purchases_user_created ON nvidium_purchases(user_id, created_at DESC)`;
+      await sql`
+        CREATE TABLE IF NOT EXISTS nvidium_rate_limits (
+          key TEXT PRIMARY KEY,
+          count INTEGER NOT NULL DEFAULT 1,
+          reset_at TIMESTAMPTZ NOT NULL
+        )
+      `;
     })().catch((err) => {
       schemaPromise = null;
       throw err;
@@ -75,17 +84,137 @@ export async function ensureSchema() {
   return schemaPromise;
 }
 
-export function hashPassword(password, salt) {
-  return crypto.pbkdf2Sync(String(password), String(salt), 120000, 32, 'sha256').toString('hex');
+export async function purgeExpiredAuthRecords(sql) {
+  await sql`DELETE FROM nvidium_sessions WHERE expires_at <= NOW()`;
+  await sql`DELETE FROM nvidium_email_codes WHERE expires_at <= NOW()`;
+  await sql`DELETE FROM nvidium_rate_limits WHERE reset_at <= NOW()`;
 }
 
-export function verifyPassword(password, salt, expectedHex) {
-  const actualBuf = Buffer.from(hashPassword(password, salt), 'hex');
-  const expectedBuf = Buffer.from(String(expectedHex || ''), 'hex');
-  if (actualBuf.length !== expectedBuf.length) {
+export function getClientIp(request) {
+  const xff = request.headers.get('x-forwarded-for') || '';
+  const first = xff.split(',')[0].trim();
+  if (first) return first.slice(0, 64);
+  const realIp = (request.headers.get('x-real-ip') || '').trim();
+  return realIp ? realIp.slice(0, 64) : 'unknown';
+}
+
+export async function checkRateLimit(sql, scope, identifier, maxRequests, windowSeconds) {
+  const keyHash = sha256Hex(scope + ':' + String(identifier || 'unknown'));
+  const rows = await sql`
+    INSERT INTO nvidium_rate_limits (key, count, reset_at)
+    VALUES (${keyHash}, 1, NOW() + make_interval(secs => ${windowSeconds}))
+    ON CONFLICT (key) DO UPDATE SET
+      count = CASE
+        WHEN nvidium_rate_limits.reset_at <= NOW() THEN 1
+        ELSE nvidium_rate_limits.count + 1
+      END,
+      reset_at = CASE
+        WHEN nvidium_rate_limits.reset_at <= NOW() THEN NOW() + make_interval(secs => ${windowSeconds})
+        ELSE nvidium_rate_limits.reset_at
+      END
+    RETURNING count, GREATEST(1, CEIL(EXTRACT(EPOCH FROM (reset_at - NOW()))))::INTEGER AS retry_after
+  `;
+  const row = rows[0];
+  return {
+    allowed: row.count <= maxRequests,
+    retryAfterSeconds: Number(row.retry_after) || windowSeconds
+  };
+}
+
+export function verifySameOrigin(request) {
+  const method = String(request.method || 'GET').toUpperCase();
+  if (method === 'GET' || method === 'HEAD' || method === 'OPTIONS') {
+    return true;
+  }
+  const host = (request.headers.get('x-forwarded-host') || request.headers.get('host') || '').split(',')[0].trim().toLowerCase();
+  if (!host) return false;
+
+  const origin = request.headers.get('origin');
+  if (origin) {
+    try {
+      const originHost = new URL(origin).host.toLowerCase();
+      return originHost === host;
+    } catch (_err) {
+      return false;
+    }
+  }
+
+  const referer = request.headers.get('referer');
+  if (referer) {
+    try {
+      const refererHost = new URL(referer).host.toLowerCase();
+      return refererHost === host;
+    } catch (_err) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export function jsonResponse(data, init = {}) {
+  const headers = new Headers(init.headers || {});
+  headers.set('Content-Type', 'application/json; charset=utf-8');
+  headers.set('Cache-Control', 'no-store, max-age=0');
+  headers.set('X-Content-Type-Options', 'nosniff');
+  return new Response(JSON.stringify(data), {
+    status: init.status || 200,
+    headers
+  });
+}
+
+export function sanitizeText(value, maxLen = 200) {
+  return String(value || '')
+    .replace(/[\u0000-\u001F\u007F]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, maxLen);
+}
+
+export function sanitizeMultilineText(value, maxLen = 8000) {
+  return String(value || '')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .trim()
+    .slice(0, maxLen);
+}
+
+export function hashPassword(password, salt) {
+  const derived = crypto.scryptSync(String(password), String(salt), 64, {
+    N: 16384,
+    r: 8,
+    p: 1
+  }).toString('hex');
+  return 'scrypt$' + derived;
+}
+
+export function verifyPassword(password, salt, expectedHash) {
+  const expectedStr = String(expectedHash || '');
+  if (expectedStr.startsWith('scrypt$')) {
+    const actualBuf = Buffer.from(hashPassword(password, salt).slice(7), 'hex');
+    const expectedBuf = Buffer.from(expectedStr.slice(7), 'hex');
+    if (actualBuf.length !== expectedBuf.length || actualBuf.length === 0) {
+      return false;
+    }
+    return crypto.timingSafeEqual(actualBuf, expectedBuf);
+  }
+  // Legacy PBKDF2-HMAC-SHA256 verification for existing accounts
+  const actualBuf = Buffer.from(
+    crypto.pbkdf2Sync(String(password), String(salt), 120000, 32, 'sha256').toString('hex'),
+    'hex'
+  );
+  const expectedBuf = Buffer.from(expectedStr, 'hex');
+  if (actualBuf.length !== expectedBuf.length || actualBuf.length === 0) {
     return false;
   }
   return crypto.timingSafeEqual(actualBuf, expectedBuf);
+}
+
+export function dummyVerifyPassword() {
+  crypto.scryptSync('dummy-password-for-timing', '0000000000000000', 64, {
+    N: 16384,
+    r: 8,
+    p: 1
+  });
 }
 
 export function generateSalt() {
@@ -93,8 +222,11 @@ export function generateSalt() {
 }
 
 function getSigningKey() {
-  const seed = process.env.AUTH_SECRET || process.env.DATABASE_URL || '';
-  return crypto.createHash('sha256').update('nvidium-auth:' + seed).digest();
+  const secret = process.env.AUTH_SECRET;
+  if (!secret || secret.length < 16) {
+    throw new Error('AUTH_SECRET environment variable must be configured (minimum 16 characters)');
+  }
+  return crypto.createHash('sha256').update('nvidium-auth:' + secret).digest();
 }
 
 export function generateEmailCode() {
@@ -120,7 +252,8 @@ function escapeHtml(value) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 export async function sendCodeEmail(toEmail, fullName, code, purpose) {
@@ -129,7 +262,7 @@ export async function sendCodeEmail(toEmail, fullName, code, purpose) {
     throw new Error('RESEND_API_KEY environment variable is not configured');
   }
   const from = process.env.RESEND_FROM || 'Nvidium <no-reply@l-ala.studio>';
-  const firstName = String(fullName || '').split(' ')[0] || 'there';
+  const firstName = sanitizeText(String(fullName || '').split(' ')[0], 40) || 'there';
   const action = purpose === 'signup' ? 'finish creating your Nvidium account' : 'sign in to Nvidium';
   const subject = code + ' is your Nvidium verification code';
   const text = 'Hi ' + firstName + ',\n\nUse this code to ' + action + ':\n\n' + code + '\n\nIt expires in ' + CODE_TTL_MINUTES + ' minutes. If you did not request it, you can ignore this email.\n\nNvidium';
@@ -150,8 +283,7 @@ export async function sendCodeEmail(toEmail, fullName, code, purpose) {
     body: JSON.stringify({ from, to: [toEmail], subject, html, text })
   });
   if (!res.ok) {
-    const detail = await res.text().catch(() => '');
-    throw new Error('Resend send failed: ' + res.status + ' ' + detail);
+    throw new Error('Resend send failed: HTTP ' + res.status);
   }
 }
 
@@ -216,7 +348,13 @@ export function parseCookies(request) {
     if (idx > 0) {
       const k = pair.slice(0, idx).trim();
       const v = pair.slice(idx + 1).trim();
-      if (k) map[k] = decodeURIComponent(v);
+      if (k) {
+        try {
+          map[k] = decodeURIComponent(v);
+        } catch (_err) {
+          map[k] = v;
+        }
+      }
     }
   });
   return map;
@@ -224,7 +362,9 @@ export function parseCookies(request) {
 
 export function buildSessionCookieHeader(token, request, maxAgeSec = 604800) {
   const proto = request.headers.get('x-forwarded-proto') || 'https';
-  const secureFlag = proto === 'http' ? '' : '; Secure';
+  const host = (request.headers.get('host') || '').toLowerCase();
+  const isLocalHttp = proto === 'http' && (host.startsWith('localhost') || host.startsWith('127.0.0.1'));
+  const secureFlag = isLocalHttp ? '' : '; Secure';
   return `nvidium_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAgeSec}${secureFlag}`;
 }
 

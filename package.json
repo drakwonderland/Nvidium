@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/drakwonderland/Nvidium#readme",
   "dependencies": {
-    "@neondatabase/serverless": "^1.2.1",
-    "qrcode": "^1.5.4"
+    "@neondatabase/serverless": "^1.2.1"
   }
 }

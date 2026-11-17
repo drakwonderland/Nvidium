@@ -1,11 +1,20 @@
 import crypto from 'node:crypto';
-import { ensureSchema, getSessionUser, getSql } from './_lib.js';
+import {
+  checkRateLimit,
+  ensureSchema,
+  getSessionUser,
+  getSql,
+  jsonResponse,
+  sanitizeMultilineText,
+  sanitizeText,
+  verifySameOrigin
+} from './_lib.js';
 
 export async function GET(request) {
   try {
     const user = await getSessionUser(request);
     if (!user) {
-      return Response.json({ error: 'Sign in required.' }, { status: 401 });
+      return jsonResponse({ error: 'Sign in required.' }, { status: 401 });
     }
     const sql = getSql();
     const rows = await sql`
@@ -15,37 +24,69 @@ export async function GET(request) {
       ORDER BY created_at DESC
       LIMIT 30
     `;
-    return Response.json({ purchases: rows });
+    return jsonResponse({ purchases: rows });
   } catch (err) {
     console.error('GET /api/purchases error:', err);
-    return Response.json({ error: 'Could not load saved builds.' }, { status: 500 });
+    return jsonResponse({ error: 'Could not load saved builds.' }, { status: 500 });
   }
 }
 
 export async function POST(request) {
   try {
+    if (!verifySameOrigin(request)) {
+      return jsonResponse({ error: 'Cross-origin request rejected.' }, { status: 403 });
+    }
+
     await ensureSchema();
     const user = await getSessionUser(request);
     if (!user) {
-      return Response.json({ error: 'Sign in required to save purchases.' }, { status: 401 });
+      return jsonResponse({ error: 'Sign in required to save purchases.' }, { status: 401 });
     }
-    const body = await request.json();
-    const id = crypto.randomUUID();
-    const orderRef = String(body.orderRef || 'NV-SAVED-' + Math.floor(1000 + (Date.now() % 9000))).slice(0, 64);
-    const itemKind = body.itemKind === 'confirmed_order' ? 'confirmed_order' : 'saved_quote';
-    const buildTitle = String(body.buildTitle || 'Custom Workstation Build').slice(0, 140);
-    const qty = Math.max(1, parseInt(body.qty, 10) || 1);
-    const hardwareTotalPhp = Math.max(0, parseInt(body.hardwareTotalPhp, 10) || 0);
-    const dueTodayPhp = Math.max(0, parseInt(body.dueTodayPhp, 10) || 0);
-    const paymentPlan = String(body.paymentPlan || '70/30 Split').slice(0, 80);
-    const slaLabel = String(body.slaLabel || 'Free 1-Yr Warranty').slice(0, 120);
-    const statusLabel = String(body.statusLabel || 'Saved Build').slice(0, 80);
-    const quoteStateJson = typeof body.quoteState === 'string'
-      ? body.quoteState
-      : JSON.stringify(body.quoteState || {});
-    const receiptText = String(body.receiptText || '').slice(0, 8000);
 
     const sql = getSql();
+    const limit = await checkRateLimit(sql, 'purchases:write:user', user.id, 30, 60);
+    if (!limit.allowed) {
+      return jsonResponse(
+        { error: 'Too many requests. Please slow down.' },
+        { status: 429, headers: { 'Retry-After': String(limit.retryAfterSeconds) } }
+      );
+    }
+
+    let body;
+    try {
+      body = await request.json();
+    } catch (_err) {
+      return jsonResponse({ error: 'Invalid JSON request body.' }, { status: 400 });
+    }
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      return jsonResponse({ error: 'Invalid request payload.' }, { status: 400 });
+    }
+
+    const id = crypto.randomUUID();
+    const orderRef = sanitizeText(body.orderRef || ('NV-SAVED-' + Math.floor(1000 + (Date.now() % 9000))), 64);
+    const itemKind = body.itemKind === 'confirmed_order' ? 'confirmed_order' : 'saved_quote';
+    const buildTitle = sanitizeText(body.buildTitle || 'Custom Workstation Build', 140) || 'Custom Workstation Build';
+    const qty = Math.min(100, Math.max(1, parseInt(body.qty, 10) || 1));
+    const hardwareTotalPhp = Math.min(50000000, Math.max(0, parseInt(body.hardwareTotalPhp, 10) || 0));
+    const dueTodayPhp = Math.min(50000000, Math.max(0, parseInt(body.dueTodayPhp, 10) || 0));
+    const paymentPlan = sanitizeText(body.paymentPlan || '70/30 Split', 80) || '70/30 Split';
+    const slaLabel = sanitizeText(body.slaLabel || 'Free 1-Yr Warranty', 120) || 'Free 1-Yr Warranty';
+    const statusLabel = sanitizeText(body.statusLabel || 'Saved Build', 80) || 'Saved Build';
+
+    let quoteStateJson;
+    try {
+      quoteStateJson = typeof body.quoteState === 'string'
+        ? JSON.stringify(JSON.parse(body.quoteState))
+        : JSON.stringify(body.quoteState || {});
+    } catch (_err) {
+      return jsonResponse({ error: 'Invalid quoteState format.' }, { status: 400 });
+    }
+    if (quoteStateJson.length > 16384) {
+      return jsonResponse({ error: 'Quote payload exceeds maximum allowed size.' }, { status: 413 });
+    }
+
+    const receiptText = sanitizeMultilineText(body.receiptText || '', 8000);
+
     await sql`
       INSERT INTO nvidium_purchases (
         id, user_id, order_ref, item_kind, build_title, qty, hardware_total_php,
@@ -57,7 +98,7 @@ export async function POST(request) {
       )
     `;
 
-    return Response.json({
+    return jsonResponse({
       saved: true,
       purchase: {
         id,
@@ -75,29 +116,46 @@ export async function POST(request) {
     });
   } catch (err) {
     console.error('POST /api/purchases error:', err);
-    return Response.json({ error: 'Could not save build to account.' }, { status: 500 });
+    return jsonResponse({ error: 'Could not save build to account.' }, { status: 500 });
   }
 }
 
 export async function DELETE(request) {
   try {
+    if (!verifySameOrigin(request)) {
+      return jsonResponse({ error: 'Cross-origin request rejected.' }, { status: 403 });
+    }
+
     await ensureSchema();
     const user = await getSessionUser(request);
     if (!user) {
-      return Response.json({ error: 'Sign in required.' }, { status: 401 });
+      return jsonResponse({ error: 'Sign in required.' }, { status: 401 });
     }
-    const url = new URL(request.url);
-    const id = String(url.searchParams.get('id') || '').trim();
-    if (!id) {
-      return Response.json({ error: 'Purchase id is required.' }, { status: 400 });
-    }
+
     const sql = getSql();
-    await sql`
+    const limit = await checkRateLimit(sql, 'purchases:write:user', user.id, 30, 60);
+    if (!limit.allowed) {
+      return jsonResponse(
+        { error: 'Too many requests. Please slow down.' },
+        { status: 429, headers: { 'Retry-After': String(limit.retryAfterSeconds) } }
+      );
+    }
+
+    const url = new URL(request.url);
+    const id = sanitizeText(url.searchParams.get('id') || '', 64);
+    if (!id) {
+      return jsonResponse({ error: 'Purchase id is required.' }, { status: 400 });
+    }
+    const deleted = await sql`
       DELETE FROM nvidium_purchases WHERE id = ${id} AND user_id = ${user.id}
+      RETURNING id
     `;
-    return Response.json({ deleted: true });
+    if (deleted.length === 0) {
+      return jsonResponse({ error: 'Saved item not found.' }, { status: 404 });
+    }
+    return jsonResponse({ deleted: true });
   } catch (err) {
     console.error('DELETE /api/purchases error:', err);
-    return Response.json({ error: 'Could not remove saved item.' }, { status: 500 });
+    return jsonResponse({ error: 'Could not remove saved item.' }, { status: 500 });
   }
 }

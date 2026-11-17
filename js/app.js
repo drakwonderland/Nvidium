@@ -2,9 +2,35 @@
   'use strict';
 
   var STORAGE_KEY = 'ccs10_proposal_state';
+  var LEGACY_ORDER_STORAGE_KEY = 'nvidium_last_order_v1';
   var SCHEMA_VERSION = 3;
   var memoryFallbackState = null;
   var storageRestricted = false;
+  var currentAccountUser = null;
+
+  function sanitizeFormInput(value, maxLen) {
+    var cleaned = String(value || '')
+      .replace(/[\u0000-\u001F\u007F]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return maxLen ? cleaned.slice(0, maxLen) : cleaned;
+  }
+
+  function getScopedStorageKey(baseKey) {
+    if (currentAccountUser && currentAccountUser.id) {
+      return baseKey + ':' + String(currentAccountUser.id);
+    }
+    return null;
+  }
+
+  function clearLegacyUnscopedStorage() {
+    try {
+      globalScope.localStorage.removeItem(STORAGE_KEY);
+      globalScope.localStorage.removeItem(LEGACY_ORDER_STORAGE_KEY);
+    } catch (_err) {
+      storageRestricted = true;
+    }
+  }
 
   var PART_CATEGORIES = [
     { id: 'cpu', selectId: 'part-cpu', label: 'Processor' },
@@ -1067,8 +1093,16 @@
         return sanitizedUrlState;
       }
 
+      var scopedKey = getScopedStorageKey(STORAGE_KEY);
+      if (!scopedKey) {
+        if (memoryFallbackState) {
+          return sanitizeState(memoryFallbackState);
+        }
+        return sanitizeState({ isCustom: false, activeQuote: DEFAULT_QUOTE });
+      }
+
       try {
-        var rawStr = globalScope.localStorage.getItem(STORAGE_KEY);
+        var rawStr = globalScope.localStorage.getItem(scopedKey);
         if (!rawStr) {
           return sanitizeState({ isCustom: false, activeQuote: DEFAULT_QUOTE });
         }
@@ -1105,15 +1139,18 @@
       });
       memoryFallbackState = candidate;
 
-      try {
-        globalScope.localStorage.setItem(STORAGE_KEY, JSON.stringify({
-          schemaVersion: candidate.schemaVersion,
-          updatedAt: candidate.updatedAt,
-          isCustom: candidate.isCustom,
-          activeQuote: candidate.activeQuote
-        }));
-      } catch (_err) {
-        storageRestricted = true;
+      var scopedKey = getScopedStorageKey(STORAGE_KEY);
+      if (scopedKey) {
+        try {
+          globalScope.localStorage.setItem(scopedKey, JSON.stringify({
+            schemaVersion: candidate.schemaVersion,
+            updatedAt: candidate.updatedAt,
+            isCustom: candidate.isCustom,
+            activeQuote: candidate.activeQuote
+          }));
+        } catch (_err) {
+          storageRestricted = true;
+        }
       }
       updateGlobalTelemetryUI(candidate);
       return candidate;
@@ -1127,8 +1164,12 @@
         activeQuote: DEFAULT_QUOTE
       });
       memoryFallbackState = baseline;
+      var scopedKey = getScopedStorageKey(STORAGE_KEY);
       try {
-        globalScope.localStorage.removeItem(STORAGE_KEY);
+        if (scopedKey) {
+          globalScope.localStorage.removeItem(scopedKey);
+        }
+        clearLegacyUnscopedStorage();
       } catch (_err) {
         storageRestricted = true;
       }
@@ -2958,11 +2999,11 @@
         return;
       }
 
-      var nameVal = document.getElementById('contact-name').value.trim();
-      var orgVal = document.getElementById('contact-org').value.trim();
-      var emailVal = document.getElementById('contact-email').value.trim();
-      var phoneVal = document.getElementById('contact-phone').value.trim();
-      var notesVal = document.getElementById('contact-notes').value.trim();
+      var nameVal = sanitizeFormInput(document.getElementById('contact-name').value, 100);
+      var orgVal = sanitizeFormInput(document.getElementById('contact-org').value, 120);
+      var emailVal = sanitizeFormInput(document.getElementById('contact-email').value, 254);
+      var phoneVal = sanitizeFormInput(document.getElementById('contact-phone').value, 32);
+      var notesVal = sanitizeFormInput(document.getElementById('contact-notes').value, 1500);
       var refId = 'NV-2026-' + String(Math.floor(1000 + (Date.now() % 9000)));
 
       var summaryText = buildPlainSummaryText(nameVal, orgVal, emailVal, phoneVal, notesVal, refId);
@@ -3408,11 +3449,11 @@
         return;
       }
 
-      var nameVal = document.getElementById('chk-name').value.trim();
-      var orgVal = document.getElementById('chk-org').value.trim();
-      var emailVal = document.getElementById('chk-email').value.trim();
-      var phoneVal = document.getElementById('chk-phone').value.trim();
-      var addressVal = document.getElementById('chk-address').value.trim();
+      var nameVal = sanitizeFormInput(document.getElementById('chk-name').value, 100);
+      var orgVal = sanitizeFormInput(document.getElementById('chk-org').value, 120);
+      var emailVal = sanitizeFormInput(document.getElementById('chk-email').value, 254);
+      var phoneVal = sanitizeFormInput(document.getElementById('chk-phone').value, 32);
+      var addressVal = sanitizeFormInput(document.getElementById('chk-address').value, 300);
 
       var breakdown = computeCheckoutBreakdown(ProposalStore.get());
       var now = Date.now();
@@ -3442,16 +3483,19 @@
         setText('ord-fulfillment-summary', breakdown.deliv.etaText);
         setText('ord-receipt-pre', receiptText);
 
-        try {
-          globalScope.localStorage.setItem(ORDER_STORAGE_KEY, JSON.stringify({
-            orderRef: orderRef,
-            timestampIso: timestampIso,
-            dueTodayPhp: breakdown.dueTodayPhp,
-            paymentStatus: paymentStatusLabel,
-            buyerName: nameVal
-          }));
-        } catch (_err) {
-          storageRestricted = true;
+        var scopedOrderKey = getScopedStorageKey(ORDER_STORAGE_KEY);
+        if (scopedOrderKey) {
+          try {
+            globalScope.localStorage.setItem(scopedOrderKey, JSON.stringify({
+              orderRef: orderRef,
+              timestampIso: timestampIso,
+              dueTodayPhp: breakdown.dueTodayPhp,
+              paymentStatus: paymentStatusLabel,
+              buyerName: nameVal
+            }));
+          } catch (_err) {
+            storageRestricted = true;
+          }
         }
 
         if (!immediate && breakdown && breakdown.totals) {
@@ -3589,8 +3633,6 @@
     }
   });
 
-  var currentAccountUser = null;
-
   function fetchSessionUser() {
     if (typeof globalScope.fetch !== 'function') {
       return Promise.resolve(null);
@@ -3630,6 +3672,12 @@
   }
 
   function syncAccountSessionUI(user) {
+    var prevUserId = currentAccountUser && currentAccountUser.id ? String(currentAccountUser.id) : null;
+    var nextUserId = user && user.id ? String(user.id) : null;
+    if (prevUserId !== nextUserId) {
+      memoryFallbackState = null;
+      clearLegacyUnscopedStorage();
+    }
     currentAccountUser = user || null;
     updateGlobalTelemetryUI(ProposalStore.get());
 
@@ -3893,6 +3941,13 @@
     }
 
     function playAuthSuccess(user) {
+      if (authMode === 'signup' && user && user.id) {
+        currentAccountUser = user;
+        ProposalStore.reset();
+        try {
+          globalScope.localStorage.removeItem(LEGACY_ORDER_STORAGE_KEY + ':' + String(user.id));
+        } catch (_err) {}
+      }
       if (otpForm) otpForm.classList.add('d-none');
       if (errorAlert) errorAlert.classList.add('d-none');
       if (authHeading) authHeading.textContent = '';
@@ -3925,7 +3980,7 @@
         try {
           var acctParams = new URLSearchParams(globalScope.location.search);
           var nextTarget = acctParams.get('next') || '';
-          if (nextTarget.indexOf('/') === 0 && nextTarget.indexOf('//') !== 0) {
+          if (nextTarget.indexOf('/') === 0 && nextTarget.indexOf('//') !== 0 && nextTarget.indexOf('/\\') !== 0) {
             globalScope.location.href = nextTarget;
             return;
           }
@@ -4019,7 +4074,8 @@
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     function renderPurchasesList(items) {
@@ -4065,8 +4121,8 @@
             '</div>' +
             receiptHtml +
             '<div class="d-flex flex-wrap gap-2 mt-3">' +
-              '<a href="/services' + stateHrefSuffix + '" class="btn btn-ink-outline btn-sm">Load in Builder</a>' +
-              '<a href="/checkout' + stateHrefSuffix + '" class="btn btn-teal btn-sm">Checkout</a>' +
+              '<a href="/services' + escapeHtmlText(stateHrefSuffix) + '" class="btn btn-ink-outline btn-sm">Load in Builder</a>' +
+              '<a href="/checkout' + escapeHtmlText(stateHrefSuffix) + '" class="btn btn-teal btn-sm">Checkout</a>' +
               '<button type="button" class="btn btn-ink-outline btn-sm ms-auto" data-delete-purchase="' + escapeHtmlText(item.id) + '">Remove</button>' +
             '</div>' +
           '</article>'
@@ -4112,6 +4168,8 @@
 
     function exitVault() {
       currentAccountUser = null;
+      memoryFallbackState = null;
+      clearLegacyUnscopedStorage();
       syncAccountSessionUI(null);
       if (vaultPanel) vaultPanel.classList.add('d-none');
       if (authPanel) authPanel.classList.remove('d-none');
@@ -4252,7 +4310,7 @@
     }
   });
   globalScope.addEventListener('storage', function (evt) {
-    if (evt.key === STORAGE_KEY) {
+    if (evt.key && (evt.key === STORAGE_KEY || evt.key.indexOf(STORAGE_KEY + ':') === 0)) {
       bootstrapApp();
     }
   });
